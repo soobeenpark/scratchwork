@@ -1,0 +1,101 @@
+// SelectionSort.cpp
+// Uses selection sort to sort any given array.
+
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+#include <random>
+
+const long len = 10;
+
+/* @brief Creates an array and returns it
+*/
+int *createArray() {
+    // random number generation
+    std::random_device rd; // used to obtain seed for rand number engine
+    std::mt19937 gen(rd()); // mersenne_twister engine seeded with rd()
+    std::uniform_int_distribution<> distrib(0, 99);
+    int *arr= new int[len];
+    for (long i=0; i<len; ++i) {
+        arr[i] = (int)distrib(gen);
+    }
+    return arr;
+}
+
+/* @brief Prints array elements one by one on same line
+*/
+void printArray(int arr[]) {
+    for (long i=0; i<len; ++i) {
+        std::cout << arr[i] << " ";
+    }
+}
+
+/* @brief Selection Sort algorithm
+*/
+void selectionSort(int arr[]) {
+    for (long i=len-1; i>=0; --i) {
+        long maxInd = 0;
+        for (long j=1; j<=i; j++) {
+            if (arr[maxInd] < arr[j]) {
+                maxInd = j;
+            }
+        }
+
+        // swap maximum into its place
+        int tmp = arr[i];
+        arr[i] = arr[maxInd];
+        arr[maxInd] = tmp;
+    }
+}
+
+/* @brief Selection Sort algorithm
+*/
+void mergeSort(int arr[], long length) {
+    // Recursive base case
+    if (length == 0 || length == 1) {
+        return;
+    }
+
+
+    long len1 = length / 2; // integer division
+    long len2 = length - len2; // integer division
+    
+    mergeSort
+}
+
+
+/* @brief Checks if array is sorted properly
+ * 
+ * Exits program if not sorted properly
+ */
+void sortChecker(int arr[]) {
+    bool sorted;
+    int prev = arr[0];
+    int curr;
+    for (long i=1; i<len; ++i) {
+        curr = arr[i];
+        if (prev > curr) {
+            // return false;
+            std::cout << "\nSorting Failed" << std::endl;
+            exit(1);
+        }
+
+        prev = curr;
+    }
+    // return true;
+}
+
+// Test different sorting algorithms
+int main() {
+    int *arr = createArray();    // {1, 5, 3, 4, 2};
+
+    printArray(arr);
+    std::cout << "Before Sorting" << std::endl;
+    
+    selectionSort(arr);
+    printArray(arr);
+    sortChecker(arr);
+    std::cout << "Selection Sort" << std::endl;
+    
+    return 0;
+}
