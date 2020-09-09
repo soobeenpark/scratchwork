@@ -39,11 +39,42 @@ void maxSubarraySum2(int n, int arr[]) {
     cout << "v2: " << best << endl;
 }
 
+/* @brief Implements max subarray sum using O(n) algorithm */
+void maxSubarraySum3(int n, int arr[]) {
+    int best = 0;
+    int subtotal = 0;
+    for (int i = 0; i < n; ++i) {
+        subtotal = max(arr[i], subtotal + arr[i]);
+        best = max(subtotal, best);
+    }
+    cout << "v3: " << best << endl;
+}
+
+/* @brief Implements max subarray sum using O(n) algorithm 
+ * 
+ * My own version that pretty much the same as version 3 (book version)
+ */
+void maxSubarraySum4(int n, int arr[]) {
+    int best = 0;
+    int subtotal = 0;
+    for (int i = 0; i < n; ++i) {
+        if (subtotal < 0) {
+            subtotal = arr[i];
+        } else {
+            subtotal += arr[i];
+        }
+        best = max(subtotal, best);
+    }
+    cout << "v4: " << best << endl;
+}
+
 int main() {
     int n = 7;
-    int arr[] = {-1, 2, 4, -3, 5, -5, 2};
+    int arr[] = {-1, 2, 4, -3, 5, 2, -5, 2};
 
     maxSubarraySum1(n, arr);
     maxSubarraySum2(n, arr);
+    maxSubarraySum3(n, arr);
+    maxSubarraySum4(n, arr);
 }
 
