@@ -60,12 +60,7 @@ bool isPermutation_v2(std::string aStr, std::string bStr) {
     std::sort(aStr.begin(), aStr.end());
     std::sort(bStr.begin(), bStr.end());
 
-    for (size_t i = 0; i < aStr.length(); ++i) {
-        if (aStr[i] != bStr[i]) {
-            return false;
-        }
-    }
-    return true;
+    return aStr == bStr;
 }
 
 
