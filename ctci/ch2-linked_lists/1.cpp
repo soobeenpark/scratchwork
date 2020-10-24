@@ -2,7 +2,7 @@
 #include <iostream>
 #include <unordered_set>
 
-#include "ListNode.h"
+#include "ListNode.cpp"
 
 /* Let n be the length of the list.
  * Time: O(n)
