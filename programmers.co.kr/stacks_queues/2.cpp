@@ -1,9 +1,15 @@
+// https://programmers.co.kr/learn/courses/30/lessons/42586
+
 #include <queue>
 #include <string>
 #include <unordered_set>
 #include <vector>
 
 using namespace std;
+
+bool contains(int item, unordered_set<int> set) {
+    return (set.find(item) != set.end());
+}
 
 void updateProgress(vector<int> &progresses, vector<int> &speeds) {
     for (int i = 0; i < progresses.size(); i++) {
@@ -13,25 +19,19 @@ void updateProgress(vector<int> &progresses, vector<int> &speeds) {
     }
 }
 
-void checkAndDeploy(const vector<int> &progresses, queue<int> &q,
-                    vector<int> &answer, int &nextToDeploy,
-                    unordered_set<int> &finished) {
+void checkAndDeploy(const vector<int> &progresses, vector<int> &answer,
+                    int &nextToDeploy, unordered_set<int> &finished) {
     int count = 0;
-    for (int i = nextToDeploy; i < progresses.size(); i++) {
-        if (progresses[i] >= 100 && finished.find(i) == finished.end()) {
+    for (int i = 0; i < progresses.size(); i++) {
+        if (progresses[i] >= 100 && !contains(i, finished)) {
             finished.insert(i);
-            if (nextToDeploy == i) {
-                // Deploy
-                while (!q.empty()) {
-                    nextToDeploy = max(nextToDeploy, q.front());
-                    q.pop();
-                    count++;
-                }
-                count++; // For the current job
+            if (i == nextToDeploy) {
+                count++;
                 nextToDeploy++;
-            } else {
-                // Add to queue
-                q.push(i);
+                while (contains(nextToDeploy, finished)) {
+                    count++;
+                    nextToDeploy++;
+                }
             }
         }
     }
@@ -51,7 +51,7 @@ vector<int> solution(vector<int> progresses, vector<int> speeds) {
         updateProgress(progresses, speeds);
 
         // Check for finished jobs and deploy as necessary
-        checkAndDeploy(progresses, q, answer, nextToDeploy, finished);
+        checkAndDeploy(progresses, answer, nextToDeploy, finished);
     }
     return answer;
 }
