@@ -1,11 +1,11 @@
 // sort.cpp
 // Test out various sorting algorithms!
 
-#include <iostream>
 #include <cassert>
-#include <ctime>
-#include <cstring>
 #include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <iostream>
 #include <random>
 
 /* Global constants */
@@ -15,36 +15,36 @@ const int NUM_ALGORITHMS = 3;
  * Helper Functions
  ************************************************************/
 /* @brief Creates an array and returns it
-*/
+ */
 void createArray(int *arr, long len) {
     // random number generation
-    std::random_device rd; // used to obtain seed for rand number engine
+    std::random_device rd;  // used to obtain seed for rand number engine
     std::mt19937 gen(rd()); // mersenne_twister engine seeded with rd()
     std::uniform_int_distribution<> distrib(0, 99);
-    for (long i=0; i<len; ++i) {
+    for (long i = 0; i < len; ++i) {
         arr[i] = (int)distrib(gen);
     }
 }
 
 /* @brief Prints array elements one by one on same line
-*/
+ */
 void printArray(int arr[], long len) {
     std::cout << "[ ";
-    for (long i=0; i<len; ++i) {
+    for (long i = 0; i < len; ++i) {
         std::cout << arr[i] << " ";
     }
     std::cout << "]\t";
 }
 
 /* @brief Checks if array is sorted properly
- * 
+ *
  * Exits program if not sorted properly
  */
 void sortChecker(int arr[], long len) {
     bool sorted;
     int prev = arr[0];
     int curr;
-    for (long i=1; i<len; ++i) {
+    for (long i = 1; i < len; ++i) {
         curr = arr[i];
         if (prev > curr) {
             std::cout << "\t<===== Sorting Failed" << std::endl;
@@ -56,23 +56,22 @@ void sortChecker(int arr[], long len) {
 }
 
 /* @brief Copies elements of one array into another array
-*/
+ */
 void copyArray(int dest[], int source[], long len) {
-    for (long i=0; i<len; ++i) {
+    for (long i = 0; i < len; ++i) {
         dest[i] = source[i];
     }
 }
-
 
 /************************************************************
  * Sorting Algorithms
  ************************************************************/
 /* @brief Selection Sort algorithm
-*/
+ */
 void selectionSort(int arr[], long len) {
-    for (long i=len-1; i>=0; --i) {
+    for (long i = len - 1; i >= 0; --i) {
         long maxInd = 0;
-        for (long j=1; j<=i; j++) {
+        for (long j = 1; j <= i; j++) {
             if (arr[maxInd] < arr[j]) {
                 maxInd = j;
             }
@@ -88,7 +87,7 @@ void selectionSort(int arr[], long len) {
 /* @brief Merge Sort algorithm #1
  *
  * Uses a recursive top-down approach
-*/
+ */
 void mergeSortTopDown(int arr[], long len) {
     // Recursive base case
     if (len == 0 || len == 1) {
@@ -96,17 +95,17 @@ void mergeSortTopDown(int arr[], long len) {
         return;
     }
 
-    long len1 = len / 2; // integer division
+    long len1 = len / 2;    // integer division
     long len2 = len - len1; // integer division
-    
+
     // First sort left and right halves
     mergeSortTopDown(arr, len1);
-    mergeSortTopDown(arr+len1, len2);
+    mergeSortTopDown(arr + len1, len2);
 
     // Next, merge the sorted left and right halves
     long i1 = 0, i2 = len1;
     long tmpIndex = 0;
-    
+
     // Initialize new tmp array
     int *tmp = new int[len];
 
@@ -131,25 +130,26 @@ void mergeSortTopDown(int arr[], long len) {
     */
 
     // Before exiting, clean up allocated tmp array
-    delete [] tmp;
+    delete[] tmp;
 }
 
 /* @brief Merge Sort algorithm #2
  *
  * Uses a bottom-up approach
-*/
+ */
 void mergeSortBottomUp(int arr[], long len) {
     // Subarrays (bins) of size 1 -> 2 -> 4 -> 8 -> ...
     for (long binSize = 1; binSize < len; binSize *= 2) {
 
         // Iterate through all bins, in pairs of 2
-        // (adjacent neighbors are merged together). 
-        for (long whichBin = 0; whichBin < len - binSize; whichBin += binSize * 2) {
+        // (adjacent neighbors are merged together).
+        for (long whichBin = 0; whichBin < len - binSize;
+             whichBin += binSize * 2) {
 
             // Set temp working array
             int *tmp = new int[len];
 
-            // Initialize indices 
+            // Initialize indices
             long i1 = whichBin;
             long i2 = i1 + binSize;
             long tempIndex = whichBin;
@@ -164,7 +164,8 @@ void mergeSortBottomUp(int arr[], long len) {
                 // If i1 is within range, and either i2 is out of range or
                 // arr[i1] < arr[i2], then we process the left half.
                 // Otherwise, we process the right half.
-                if (i1 < leftBinBound && (i2 >= rightBinBound || arr[i1] < arr[i2])) {
+                if (i1 < leftBinBound &&
+                    (i2 >= rightBinBound || arr[i1] < arr[i2])) {
                     tmp[tempIndex++] = arr[i1++];
                 } else {
                     tmp[tempIndex++] = arr[i2++];
@@ -175,11 +176,9 @@ void mergeSortBottomUp(int arr[], long len) {
             copyArray(arr + whichBin, tmp + whichBin, rightBinBound - whichBin);
 
             // Make sure to clean up allocated tmp array
-            delete [] tmp;
+            delete[] tmp;
         }
-
     }
-
 }
 
 /************************************************************
@@ -202,8 +201,9 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    // Create a random array (used as an original for multiple copies to be made of)
-    int *arr= new int[len];
+    // Create a random array (used as an original for multiple copies to be made
+    // of)
+    int *arr = new int[len];
     createArray(arr, len);
 
     // Copies of unsorted arr will be held so that each algorithm can operate
@@ -211,17 +211,17 @@ int main(int argc, char *argv[]) {
     int *unsortedArraysList[NUM_ALGORITHMS];
 
     // Create new unsorted copies of lists
-    for (int i=0; i<NUM_ALGORITHMS; ++i) {
+    for (int i = 0; i < NUM_ALGORITHMS; ++i) {
         unsortedArraysList[i] = new int[len];
         copyArray(unsortedArraysList[i], arr, len);
     }
 
-    // Print out array before sorting 
+    // Print out array before sorting
     printArray(arr, len);
     std::cout << "Before Sorting" << std::endl;
-    
-    // Do the sorts and print out before / after results 
-    for (int i=0; i<NUM_ALGORITHMS; ++i) {
+
+    // Do the sorts and print out before / after results
+    for (int i = 0; i < NUM_ALGORITHMS; ++i) {
         // Do the sort
         if (i == 0) {
             selectionSort(unsortedArraysList[i], len);
@@ -251,11 +251,11 @@ int main(int argc, char *argv[]) {
     }
 
     // Delete the dynamically allocated original array
-    delete [] arr;
+    delete[] arr;
 
     // Delete copies of the unsorted lists
-    for (int i=0; i<NUM_ALGORITHMS; ++i) {
-        delete [] unsortedArraysList[i]; 
+    for (int i = 0; i < NUM_ALGORITHMS; ++i) {
+        delete[] unsortedArraysList[i];
     }
 
     // Normal exit

@@ -1,10 +1,10 @@
 // Return Kth to Last
-// Implement an algorithm to find the kth to last element of a singly linked list.
+// Implement an algorithm to find the kth to last element of a singly linked
+// list.
 
 #include <iostream>
 
 #include "ListNode.cpp"
-
 
 /* Let n be the length of the list.
  * Time: O(n)
@@ -17,26 +17,26 @@ int kthLastIterative(ListNode *head, int k) {
         if (p2 == nullptr) {
             return -1; // Bounds check
         }
-        p2 = p2 -> next;
+        p2 = p2->next;
     }
 
     while (p2 != nullptr) {
-        p1 = p1 -> next;
-        p2 = p2 -> next;
+        p1 = p1->next;
+        p2 = p2->next;
     }
 
-    return p1 -> val;
+    return p1->val;
 }
 
 // Helper for recursive
-int kthLastRecursiveHelper(ListNode* head, int k, int& count) {
+int kthLastRecursiveHelper(ListNode *head, int k, int &count) {
     if (head == nullptr) {
         return -1;
     }
     int result = kthLastRecursiveHelper(head->next, k, count);
     count++;
     if (count == k) {
-        return head -> val;
+        return head->val;
     }
     return result;
 }
@@ -50,18 +50,17 @@ int kthLastRecursive(ListNode *head, int k) {
     return kthLastRecursiveHelper(head, k, count);
 }
 
-
 void test(ListNode *head, int k, int shouldEqual) {
     int resultIterative = kthLastIterative(head, k);
     if (resultIterative != shouldEqual) {
-        std::cout << "TEST FAIL - iterative: " << resultIterative << 
-            " should eval to " << shouldEqual << std::endl;
+        std::cout << "TEST FAIL - iterative: " << resultIterative
+                  << " should eval to " << shouldEqual << std::endl;
     }
 
     int resultRecursive = kthLastRecursive(head, k);
     if (resultRecursive != shouldEqual) {
-        std::cout << "TEST FAIL - recursive: " << resultRecursive << 
-            " should eval to " << shouldEqual << std::endl;
+        std::cout << "TEST FAIL - recursive: " << resultRecursive
+                  << " should eval to " << shouldEqual << std::endl;
     }
 }
 

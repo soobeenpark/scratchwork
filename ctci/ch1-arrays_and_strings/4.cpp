@@ -41,18 +41,18 @@ bool palindromePermutation_v1(std::string s) {
     std::string substring;
     if (foundIndex == 0) { // Pair not found
         if (s.length() % 2 == 0) {
-            // Single non-matching char can only be in palindrome if string is even length.
+            // Single non-matching char can only be in palindrome if string is
+            // even length.
             return false;
         } else {
             substring = s.substr(1);
         }
     } else {
-        substring = s.substr(1, foundIndex-1) + s.substr(foundIndex+1);
+        substring = s.substr(1, foundIndex - 1) + s.substr(foundIndex + 1);
     }
 
     return palindromePermutation_v1(substring);
 }
-
 
 /* Hash Table implementation - two passes.
  *
@@ -67,8 +67,9 @@ bool palindromePermutation_v2(std::string s) {
         map[c]++;
     }
 
-    // A palindrome must have all even number of counts, with the one exception that
-    // exactly one character count can be odd iff the string is of odd length.
+    // A palindrome must have all even number of counts, with the one exception
+    // that exactly one character count can be odd iff the string is of odd
+    // length.
     bool oddCountEncountered = false;
     std::unordered_map<char, size_t>::iterator iter;
     for (iter = map.begin(); iter != map.end(); ++iter) {
@@ -84,9 +85,8 @@ bool palindromePermutation_v2(std::string s) {
     return true;
 }
 
-
 /* Hash Table implementation - one pass.
- * 
+ *
  * As noted in CTCI, not necessarily more optimal than v2.
  *
  * Let n be the length of the string.
@@ -108,8 +108,8 @@ bool palindromePermutation_v3(std::string s) {
     return oddCount <= 1;
 }
 
-
-/* Bitset implementation of version3, uses less memory and faster using bitwise operations.
+/* Bitset implementation of version3, uses less memory and faster using bitwise
+ * operations.
  *
  * We assume that the charset size of string is equal to CHARSET_SIZE.
  *
@@ -120,9 +120,11 @@ bool palindromePermutation_v3(std::string s) {
 bool palindromePermutation_v4(std::string s) {
     std::bitset<CHARSET_SIZE> flags;
     for (char c : s) {
-        int index = c - 'a'; // We assume that we are working with lowercase alphabetic chars.
+        int index = c - 'a'; // We assume that we are working with lowercase
+                             // alphabetic chars.
 
-        // Toggle the bitset index to on/off to keep track if character count is even/odd.
+        // Toggle the bitset index to on/off to keep track if character count is
+        // even/odd.
         if (flags[index]) {
             flags[index] = 0;
         } else {
@@ -134,26 +136,28 @@ bool palindromePermutation_v4(std::string s) {
     return flags.count() <= 1;
 }
 
-
 void test(std::string s, bool shouldEqual) {
     std::string eqStr = shouldEqual ? "true" : "false";
     if (palindromePermutation_v1(s) != shouldEqual) {
-        std::cout << "TEST FAIL - v1: " << s << " should eval to " << eqStr << std::endl;
+        std::cout << "TEST FAIL - v1: " << s << " should eval to " << eqStr
+                  << std::endl;
     }
 
     if (palindromePermutation_v2(s) != shouldEqual) {
-        std::cout << "TEST FAIL - v2: " << s << " should eval to " << eqStr << std::endl;
+        std::cout << "TEST FAIL - v2: " << s << " should eval to " << eqStr
+                  << std::endl;
     }
 
     if (palindromePermutation_v3(s) != shouldEqual) {
-        std::cout << "TEST FAIL - v3: " << s << " should eval to " << eqStr << std::endl;
+        std::cout << "TEST FAIL - v3: " << s << " should eval to " << eqStr
+                  << std::endl;
     }
 
     if (palindromePermutation_v4(s) != shouldEqual) {
-        std::cout << "TEST FAIL - v4: " << s << " should eval to " << eqStr << std::endl;
+        std::cout << "TEST FAIL - v4: " << s << " should eval to " << eqStr
+                  << std::endl;
     }
 }
-
 
 int main() {
     std::string s1 = "carrace";

@@ -1,6 +1,6 @@
 #include <iostream>
-#include <unordered_set>
 #include <string>
+#include <unordered_set>
 
 /* Use a set to store characters.
  * Lookup time for each character in set is O(1).

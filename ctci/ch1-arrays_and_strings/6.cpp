@@ -14,7 +14,7 @@ std::string compress_v1(std::string src) {
     size_t count = 0;
     for (size_t i = 0; i < src.length(); ++i) {
         count++;
-        if (i+1 == src.length() || src[i+1] != src[i]) {
+        if (i + 1 == src.length() || src[i + 1] != src[i]) {
             ss << src[i];
             ss << count;
             count = 0; // Reset count since tracking character was reset.
@@ -26,14 +26,13 @@ std::string compress_v1(std::string src) {
     return ret.length() < src.length() ? ret : src;
 }
 
-
 // Helper for v2
 size_t compressedLength(std::string src) {
     size_t ret = 0;
     size_t count = 0;
     for (size_t i = 0; i < src.length(); ++i) {
         count++;
-        if (i+1 == src.length() || src[i] != src[i+1]) {
+        if (i + 1 == src.length() || src[i] != src[i + 1]) {
             ret += 1 + std::to_string(count).length();
             count = 0;
         }
@@ -60,7 +59,7 @@ std::string compress_v2(std::string src) {
     size_t count = 0;
     for (size_t i = 0; i < src.length(); ++i) {
         count++;
-        if (i+1 == src.length() || src[i+1] != src[i]) {
+        if (i + 1 == src.length() || src[i + 1] != src[i]) {
             ss << src[i];
             ss << count;
             count = 0; // Reset count since tracking character was reset.
@@ -70,14 +69,15 @@ std::string compress_v2(std::string src) {
     return ss.str();
 }
 
-
 void test(std::string src, std::string target) {
     if (compress_v1(src) != target) {
-        std::cout << "TEST FAIL v1: " << compress_v1(src) << " should equal " << target << std::endl;
+        std::cout << "TEST FAIL v1: " << compress_v1(src) << " should equal "
+                  << target << std::endl;
     }
 
     if (compress_v2(src) != target) {
-        std::cout << "TEST FAIL v2: " << compress_v2(src) << " should equal " << target << std::endl;
+        std::cout << "TEST FAIL v2: " << compress_v2(src) << " should equal "
+                  << target << std::endl;
     }
 }
 

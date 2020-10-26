@@ -46,7 +46,6 @@ bool oneAwayInsert(std::string aStr, std::string bStr) {
     return true;
 }
 
-
 /* Time: O(n)
  * Space: O(1)
  */
@@ -61,7 +60,6 @@ bool oneAway(std::string aStr, std::string bStr) {
         return false;
     }
 }
-
 
 /* Combined version of Replace and Insert
  * Removes code duplication, but may sacrifice some readability.
@@ -94,17 +92,16 @@ bool oneAwayCombined(std::string aStr, std::string bStr) {
     return true;
 }
 
-
 void test(std::string aStr, std::string bStr, bool shouldEqual) {
     std::string eqStr = shouldEqual ? "true" : "false";
     if (oneAway(aStr, bStr) != shouldEqual) {
-        std::cout << "TEST FAIL v1: [" << aStr << " :: " << bStr << 
-            "] should eval to " << eqStr << std::endl;
+        std::cout << "TEST FAIL v1: [" << aStr << " :: " << bStr
+                  << "] should eval to " << eqStr << std::endl;
     }
 
     if (oneAwayCombined(aStr, bStr) != shouldEqual) {
-        std::cout << "TEST FAIL v2: [" << aStr << " :: " << bStr << 
-            "] should eval to " << eqStr << std::endl;
+        std::cout << "TEST FAIL v2: [" << aStr << " :: " << bStr
+                  << "] should eval to " << eqStr << std::endl;
     }
 }
 

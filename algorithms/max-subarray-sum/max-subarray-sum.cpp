@@ -50,8 +50,8 @@ void maxSubarraySum3(int n, int arr[]) {
     cout << "v3: " << best << endl;
 }
 
-/* @brief Implements max subarray sum using O(n) algorithm 
- * 
+/* @brief Implements max subarray sum using O(n) algorithm
+ *
  * My own version that pretty much the same as version 3 (book version)
  */
 void maxSubarraySum4(int n, int arr[]) {
@@ -77,4 +77,3 @@ int main() {
     maxSubarraySum3(n, arr);
     maxSubarraySum4(n, arr);
 }
-

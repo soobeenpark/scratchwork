@@ -15,8 +15,7 @@ struct ListNode {
     // Constructors
     ListNode() : val(0), next(nullptr) {}
     ListNode(int x) : val(x), next(nullptr) {}
-    ListNode(int x, ListNode* ptr) : val(x), next(ptr) {}
-    
+    ListNode(int x, ListNode *ptr) : val(x), next(ptr) {}
 };
 
 // Print from current node to the end of list.
@@ -35,10 +34,10 @@ ListNode *copyList(ListNode *head) {
         return nullptr;
     }
     // Create first node
-    ListNode* newHead = new ListNode(head->val);
+    ListNode *newHead = new ListNode(head->val);
     head = head->next;
 
-    ListNode *prev = newHead; 
+    ListNode *prev = newHead;
     while (head != nullptr) {
         ListNode *curr = new ListNode(head->val);
         prev->next = curr;
@@ -55,10 +54,10 @@ void deleteList(ListNode *head) {
     ListNode *curr = head;
     ListNode *prev = curr;
     while (curr != nullptr) {
-        curr = curr -> next;
+        curr = curr->next;
         delete prev;
         prev = curr;
     }
 }
 
-#endif //LISTNODE_H
+#endif // LISTNODE_H

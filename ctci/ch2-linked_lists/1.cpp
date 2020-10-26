@@ -8,9 +8,9 @@
  * Time: O(n)
  * Space: O(n)
  */
-ListNode* removeDups(ListNode *head) {
+ListNode *removeDups(ListNode *head) {
     std::unordered_set<int> set;
-    
+
     ListNode *curr = head;
     ListNode *prev = nullptr;
     while (curr != nullptr) {
@@ -41,8 +41,8 @@ ListNode* removeDups(ListNode *head) {
  * Time: O(n^2)
  * Space: O(1)
  */
-ListNode* removeDupsNoBuffer(ListNode *head) {
-    for (ListNode *curr = head; curr != nullptr; curr = curr -> next) {
+ListNode *removeDupsNoBuffer(ListNode *head) {
+    for (ListNode *curr = head; curr != nullptr; curr = curr->next) {
         ListNode *runnerPrev = curr;
         ListNode *runner = curr->next;
         while (runner != nullptr) {
@@ -61,7 +61,6 @@ ListNode* removeDupsNoBuffer(ListNode *head) {
     }
     return head;
 }
-
 
 int main() {
     // Create Linked List

@@ -15,7 +15,7 @@ bool isPermutation_v1(std::string aStr, std::string bStr) {
     }
 
     std::unordered_map<char, int> charMap;
-    
+
     // O(n) since n amounts of O(1) (amortized) insertions into hash table.
     for (size_t i = 0; i < aStr.length(); i++) {
         ++charMap[aStr[i]];
@@ -62,7 +62,6 @@ bool isPermutation_v2(std::string aStr, std::string bStr) {
 
     return aStr == bStr;
 }
-
 
 int main() {
     std::string s1 = "abde";
@@ -122,7 +121,6 @@ int main() {
     if (isPermutation_v2(s1, empty)) {
         std::cout << "Test 6 FAIL" << std::endl;
     }
-    
 
     std::cout << "Tests finished" << std::endl;
 }
