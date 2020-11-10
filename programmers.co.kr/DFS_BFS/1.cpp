@@ -11,8 +11,8 @@ int search(int k, const vector<int> &numbers, int sum, const int target) {
         return (int)(sum == target);
     }
     // Addition case
-    int ans = search(k+1, numbers, sum+numbers[k], target);
-    ans += search(k+1, numbers, sum-numbers[k], target);
+    int ans = search(k + 1, numbers, sum + numbers[k], target);
+    ans += search(k + 1, numbers, sum - numbers[k], target);
     return ans;
 }
 

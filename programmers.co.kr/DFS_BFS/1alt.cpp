@@ -2,11 +2,11 @@
 // Target Number
 // Includes a couple of different variations to solve the same problem.
 
+#include <queue>
+#include <stack>
 #include <string>
 #include <utility>
 #include <vector>
-#include <queue>
-#include <stack>
 
 using namespace std;
 
@@ -14,7 +14,7 @@ using namespace std;
 int solution_bits(vector<int> numbers, int target) {
     int answer = 0;
     int size = numbers.size();
-    
+
     // Go through each leaf node in search graph
     for (int i = 0; i < (1 << size); i++) {
         int sum = 0;
@@ -60,7 +60,7 @@ int solution_dfs(vector<int> numbers, int target) {
 
 // BFS using queue
 int solution_bfs(vector<int> numbers, int target) {
-    queue<pair<int, int>> q;  // <sum, level>
+    queue<pair<int, int>> q; // <sum, level>
     q.push(make_pair(0, 0));
 
     int answer = 0;
