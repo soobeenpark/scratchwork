@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 
     // Error checking for args passed in
     if (len < 1 || (strcmp(argv[1], "\0") == 0) || *endptr != '\0') {
-        std::cout << "Please enter a valid integer greater than 1" << std::endl;
+        std::cout << "Please enter a valid integer of at least 1" << std::endl;
         exit(1);
     }
 
