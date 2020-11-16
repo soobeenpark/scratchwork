@@ -5,7 +5,7 @@ do
     for iter in {1..3}
     do
         # Run sort
-        ./sort "$numElems" >/dev/null
+        ./sort.bin "$numElems" >/dev/null
         
         # Check exit condition
         if [ $? -eq 0 ]
