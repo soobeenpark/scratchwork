@@ -6,12 +6,14 @@
 #include <cstring>
 #include <iostream>
 
+#include "InsertionSort.cpp"
 #include "MergeSort.cpp"
 #include "SelectionSort.cpp"
+#include "QuickSort.cpp"
 #include "helpers.cpp"
 
 /* Global constants */
-const int NUM_ALGORITHMS = 3;
+const int NUM_ALGORITHMS = 5;
 
 // Test different sorting algorithms
 int main(int argc, char *argv[]) {
@@ -59,6 +61,10 @@ int main(int argc, char *argv[]) {
             mergeSortTopDown(unsortedArraysList[i], len);
         } else if (i == 2) {
             mergeSortBottomUp(unsortedArraysList[i], len);
+        } else if (i == 3) {
+            quickSort(unsortedArraysList[i], len);
+        } else if (i == 4) {
+            insertionSort(unsortedArraysList[i], len);
         }
 
         // Print out array after sorting
@@ -72,6 +78,10 @@ int main(int argc, char *argv[]) {
             sortName = "Merge Sort Top Down";
         } else if (i == 2) {
             sortName = "Merge Sort Bottom Up";
+        } else if (i == 3) {
+            sortName = "Quick Sort";
+        } else if (i == 4) {
+            sortName = "Insertion Sort";
         }
         std::cout << sortName;
 
