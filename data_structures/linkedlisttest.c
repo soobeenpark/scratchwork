@@ -5,14 +5,14 @@
 
 int main() {
     // Create a new linked list
-    list* A = malloc(sizeof(list));
-    list* B = malloc(sizeof(list));
-    list* C = malloc(sizeof(list));
-    list* D = malloc(sizeof(list));
-    list* E = malloc(sizeof(list));
-    list* F = malloc(sizeof(list));
+    list *A = malloc(sizeof(list));
+    list *B = malloc(sizeof(list));
+    list *C = malloc(sizeof(list));
+    list *D = malloc(sizeof(list));
+    list *E = malloc(sizeof(list));
+    list *F = malloc(sizeof(list));
 
-    // A -> B -> C -> D -> E    
+    // A -> B -> C -> D -> E
     //           |_________|
     A->next = B;
     B->next = C;

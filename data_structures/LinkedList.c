@@ -14,7 +14,8 @@
 bool is_segment(list *start, list *end) {
     list *iter = start;
     while (iter != NULL) {
-        if (iter == end) return true;
+        if (iter == end)
+            return true;
         iter = iter->next;
     }
     return false;
@@ -26,7 +27,8 @@ bool is_segment(list *start, list *end) {
  * @return: true if there is no cycle in the segment, false otherwise.
  */
 bool is_acyclic(list *start) {
-    if (start == NULL) return true;
+    if (start == NULL)
+        return true;
     list *slow = start;
     list *fast = start->next;
     while (slow != fast) {

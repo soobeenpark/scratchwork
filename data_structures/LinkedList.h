@@ -9,8 +9,8 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 
-#include <stdlib.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 typedef int ItemType;
 
