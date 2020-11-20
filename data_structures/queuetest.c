@@ -6,7 +6,7 @@
 int main() {
     queue_t q = queue_new();
     assert(queue_empty(q));
-    
+
     enq(q, 5);
     assert(peek(q) == 5);
     assert(!queue_empty(q));
@@ -21,7 +21,7 @@ int main() {
     assert(x == 5);
     assert(peek(q) == 2);
     assert(!queue_empty(q));
-    
+
     enq(q, 6);
     assert(peek(q) == 2);
     assert(!queue_empty(q));
@@ -40,5 +40,7 @@ int main() {
     assert(x == 6);
     assert(queue_empty(q));
 
-    printf("Testing complete\n");
+    queue_delete(q);
+
+    printf("Testing complete. No bugs found.\n");
 }

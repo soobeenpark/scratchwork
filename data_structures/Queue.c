@@ -61,7 +61,6 @@ void queue_delete(queue *Q) {
     }
     free(Q->front); // Delete dummy node
     free(Q);        // Delete Queue
-    assert(!is_queue(Q));
 }
 
 /* @brief Enqueue element to back of queue

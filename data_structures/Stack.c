@@ -59,7 +59,6 @@ void stack_delete(stack *S) {
         free(to_delete);
     }
     free(S); // Delete Stack
-    assert(!is_stack(S));
 }
 
 /* @brief Push element to top of stack
