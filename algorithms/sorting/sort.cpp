@@ -8,8 +8,8 @@
 
 #include "InsertionSort.cpp"
 #include "MergeSort.cpp"
-#include "SelectionSort.cpp"
 #include "QuickSort.cpp"
+#include "SelectionSort.cpp"
 #include "helpers.cpp"
 
 /* Global constants */

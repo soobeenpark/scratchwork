@@ -1,18 +1,21 @@
-#include <string>
-#include <vector>
+// https://programmers.co.kr/learn/courses/30/lessons/49189
+// Farthest Node
+
 #include <algorithm>
 #include <queue>
+#include <string>
+#include <vector>
 
 using namespace std;
 
 const int START = 1;
 
 int bfs(int n, vector<int> adj[]) {
-    queue<pair<int, int>> q;  // <node, distance>
+    queue<pair<int, int>> q; // <node, distance>
     q.push(make_pair(START, 0));
-    vector<bool> visited(n+1, false);
+    vector<bool> visited(n + 1, false);
     visited[START] = true;
-    vector<int> distances(n+1, 0);
+    vector<int> distances(n + 1, 0);
     int distance = 0;
 
     while (!q.empty()) {
@@ -25,7 +28,7 @@ int bfs(int n, vector<int> adj[]) {
         for (int adjNode : adj[node]) {
             if (!visited[adjNode]) {
                 visited[adjNode] = true;
-                q.push(make_pair(adjNode, distance+1));
+                q.push(make_pair(adjNode, distance + 1));
             }
         }
     }
@@ -39,7 +42,7 @@ int bfs(int n, vector<int> adj[]) {
 
 int solution(int n, vector<vector<int>> edges) {
     // Create adjacency list
-    vector<int> adj[n+1];
+    vector<int> adj[n + 1];
     for (vector<int> edge : edges) {
         adj[edge[0]].push_back(edge[1]);
         adj[edge[1]].push_back(edge[0]);
@@ -48,4 +51,3 @@ int solution(int n, vector<vector<int>> edges) {
     // bfs
     return bfs(n, adj);
 }
-

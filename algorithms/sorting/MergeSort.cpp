@@ -3,8 +3,9 @@
 
 #include "helpers.cpp"
 
-/* @brief: Merges two sorted subarrays (left and right) into one full sorted array.
- * 
+/* @brief: Merges two sorted subarrays (left and right) into one full sorted
+ * array.
+ *
  * Args:
  *  arr: The array containing left and right halves that we want to merge.
  *  len: The length of the array.
@@ -12,7 +13,7 @@
  */
 void merge(int arr[], long len, int boundary) {
     int tmp[len];
-    
+
     int iter = 0;
     int left1 = 0;
     int left2 = boundary;
@@ -38,7 +39,7 @@ void mergeSortTopDown(int arr[], long len) {
         return;
     }
 
-    long mid = len / 2;    // integer division
+    long mid = len / 2;        // integer division
     long rightLen = len - mid; // integer division
 
     // First sort left and right halves
@@ -62,7 +63,7 @@ void mergeSortBottomUp(int arr[], long len) {
         for (long whichBin = 0; whichBin < len - binSize;
              whichBin += binSize * 2) {
 
-            long binsLength = std::min(binSize * 2, len-whichBin);
+            long binsLength = std::min(binSize * 2, len - whichBin);
             merge(arr + whichBin, binsLength, binSize);
         }
     }
