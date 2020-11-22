@@ -3,6 +3,7 @@
 
 #include <algorithm>
 
+/* @brief Insertion Sort algorithm */
 void insertionSort(int arr[], long len) {
     for (int i = 1; i < len; i++) { // Loop invariant: arr[0, i) is sorted
         for (int j = 0; j < i; j++) {

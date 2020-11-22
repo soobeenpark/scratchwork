@@ -1,8 +1,9 @@
 #ifndef SELECTIONSORT_CPP
 #define SELECTIONSORT_CPP
 
-/* @brief Selection Sort algorithm
- */
+#include <algorithm>
+
+/* @brief Selection Sort algorithm */
 void selectionSort(int arr[], long len) {
     for (long i = len - 1; i >= 0; --i) {
         long maxInd = 0;
@@ -13,9 +14,7 @@ void selectionSort(int arr[], long len) {
         }
 
         // swap maximum into its place
-        int tmp = arr[i];
-        arr[i] = arr[maxInd];
-        arr[maxInd] = tmp;
+        std::swap(arr[i], arr[maxInd]);
     }
 }
 

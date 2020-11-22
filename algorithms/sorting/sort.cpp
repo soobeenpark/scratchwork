@@ -6,6 +6,8 @@
 #include <cstring>
 #include <iostream>
 
+#include "BubbleSort.cpp"
+#include "GnomeSort.cpp"
 #include "InsertionSort.cpp"
 #include "MergeSort.cpp"
 #include "QuickSort.cpp"
@@ -13,7 +15,7 @@
 #include "helpers.cpp"
 
 /* Global constants */
-const int NUM_ALGORITHMS = 5;
+const int NUM_ALGORITHMS = 7;
 
 // Test different sorting algorithms
 int main(int argc, char *argv[]) {
@@ -65,6 +67,10 @@ int main(int argc, char *argv[]) {
             quickSort(unsortedArraysList[i], len);
         } else if (i == 4) {
             insertionSort(unsortedArraysList[i], len);
+        } else if (i == 5) {
+            bubbleSort(unsortedArraysList[i], len);
+        } else if (i == 6) {
+            gnomeSort(unsortedArraysList[i], len);
         }
 
         // Print out array after sorting
@@ -82,6 +88,10 @@ int main(int argc, char *argv[]) {
             sortName = "Quick Sort";
         } else if (i == 4) {
             sortName = "Insertion Sort";
+        } else if (i == 5) {
+            sortName = "Bubble Sort";
+        } else if (i == 6) {
+            sortName = "Gnome Sort";
         }
         std::cout << sortName;
 

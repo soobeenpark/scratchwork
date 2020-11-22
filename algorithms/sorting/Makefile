@@ -3,11 +3,8 @@ CFLAGS=-Wall -g
 
 src = sort.cpp
 
-sort: sort.o
-	g++ sort.o -o sort $(CFLAGS)
-
-sort.o: $(src)
-	g++ -g -c $(src) -o sort.o
+sort:
+	$(CC) $(src) -o sort.bin $(CFLAGS)
 
 clean:
-	rm -f sort.o sort
+	rm -f sort.o sort.bin
