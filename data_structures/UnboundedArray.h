@@ -41,6 +41,6 @@ void uba_set(uba_t A, int i, ItemType x); // O(1)
 void uba_add(uba_t A, ItemType x); // O(1) amortized
 
 // Remove the last element from the array.
-void uba_rem(uba_t A); // O(1) amortized
+ItemType uba_rem(uba_t A); // O(1) amortized
 
 #endif /* UNBOUNDED_ARRAY_H */

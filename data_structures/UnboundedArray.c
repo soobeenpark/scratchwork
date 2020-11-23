@@ -16,8 +16,12 @@
  * @return: true if valid uba, false otherwise.
  */
 bool is_uba(uba *A) {
-    return A != NULL && A->data != NULL && A->limit > 0 && A->size >= 0 &&
-           A->size < A->limit;
+    // A->size >= A->limit/4 is there to make sure uba_rem has O(1) amortized
+    // cost to remove elements.
+    // Tokens must be stored in the second quarter of the array when removing,
+    // otherwise each operation is O(n) amortized, not O(1).
+    return A != NULL && A->data != NULL && A->limit > 0 &&
+           A->size >= A->limit / 4 && A->size < A->limit;
 }
 
 /* Get length of the array in use.
@@ -27,7 +31,7 @@ bool is_uba(uba *A) {
  * @param[in] A: The uba
  * @return: The size actively being used in the underlying array.
  */
-int uba_len(uba_t A) {
+int uba_len(uba *A) {
     assert(is_uba(A));
     assert(A->size >= 0 && A->size < A->limit);
     return A->size;
@@ -59,7 +63,7 @@ uba_t uba_new(int size) {
  * @post: !is_uba(A)
  * @param[in] A: The uba.
  */
-void uba_delete(uba_t A) {
+void uba_delete(uba *A) {
     assert(is_uba(A));
     free(A->data);
     free(A);
@@ -74,7 +78,7 @@ void uba_delete(uba_t A) {
  * @param[in] i: The index to the array.
  * @return: The element at index i
  */
-ItemType uba_get(uba_t A, int i) {
+ItemType uba_get(uba *A, int i) {
     assert(is_uba(A));
     assert(i >= 0 && i < uba_len(A));
 
@@ -90,7 +94,7 @@ ItemType uba_get(uba_t A, int i) {
  * @param[in] i: The index to the array.
  * @param[in] x: The element to insert at index i
  */
-void uba_set(uba_t A, int i, ItemType x) {
+void uba_set(uba *A, int i, ItemType x) {
     assert(is_uba(A));
     assert(i >= 0 && i < uba_len(A));
 
@@ -104,7 +108,7 @@ void uba_set(uba_t A, int i, ItemType x) {
  * @pre: 0 <= A->size && A->size < new_limit
  * @pre: post: is_uba(A)   (Restores data structure invariant)
  */
-void uba_resize(uba_t A, int new_limit) {
+void uba_resize(uba *A, int new_limit) {
     assert(A != NULL);
     assert(0 <= A->size && A->size < new_limit);
 
@@ -112,6 +116,7 @@ void uba_resize(uba_t A, int new_limit) {
 
     // Copy items over
     for (int i = 0; i < A->size; i++) {
+        assert(i < new_limit);
         assert(0 <= i && i <= A->size); // Loop invariant
         B[i] = A->data[i];
     }
@@ -130,7 +135,7 @@ void uba_resize(uba_t A, int new_limit) {
  * @param[in] A: The uba.
  * @param[in] x: The element to append to the end.
  */
-void uba_add(uba_t A, ItemType x) {
+void uba_add(uba *A, ItemType x) {
     assert(is_uba(A));
 
     A->data[A->size++] = x;
@@ -152,10 +157,15 @@ void uba_add(uba_t A, ItemType x) {
  * @post: is_uba(A)
  * @param[in] A: The uba.
  */
-void uba_rem(uba_t A) {
+ItemType uba_rem(uba *A) {
     assert(is_uba(A));
     assert(uba_len(A) > 0);
 
-    A->size--;
+    ItemType ret = A->data[--A->size];
+    if (A->size < A->limit / 4) {
+        // Need to resize
+        uba_resize(A, A->limit / 4); // Resize when quarter for amortized O(1)
+    }
     assert(is_uba(A));
+    return ret;
 }
