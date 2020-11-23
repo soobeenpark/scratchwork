@@ -49,7 +49,7 @@ uba_t uba_new(int size) {
 
     uba *A = malloc(sizeof(uba));
     int limit = (size == 0) ? 1 : size * 2;
-    A->data = malloc(sizeof(ItemType) * limit);
+    A->data = calloc(limit, sizeof(ItemType));
     A->size = size;
     A->limit = limit;
 
