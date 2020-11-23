@@ -1,25 +1,4 @@
 """
-This program outputs the number of bit flips necessary to convert a number N from
-N-1.
-
-For example, 11 (0b1011) to 12 (0b1100) requires flipping 3 bits.
-
-For a given number n, the list of required bit flips from each of its previous number is printed.
-For example, given n=12, the following would be printed.
-
-1: 1
-2: 2
-3: 1
-4: 3
-5: 1
-6: 2
-7: 1
-8: 4
-9: 1
-10: 2
-11: 1
-12: 3
-
 Uses an iterative method to fill out the result list.
 """
 
@@ -27,11 +6,11 @@ import sys
 
 def bitFlipsIterative(n):
     """
-    Recursive implementation of number of bit flips necessary in binary counting
+    Iterative implementation of number of bit flips necessary in binary counting
 
     pre: n must be a positive integer (greater than 0).
     param (int): n
-    return (list): Array containing the number of bit flips for each number, starting from 0.
+    return (list): Array containing the number of bit flips for each number, starting from 1.
     """
     ret = [0] * n
     ret[0] = 1
