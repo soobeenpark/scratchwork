@@ -10,5 +10,8 @@ queue:
 stack:
 	$(CC) -o stack.bin LinkedList.c Stack.c stacktest.c $(CFLAGS)
 
+unboundedarray:
+	$(CC) -o unboundedarray.bin UnboundedArray.c unboundedarraytest.c $(CFLAGS)
+
 clean:
 	rm -rf *.bin
