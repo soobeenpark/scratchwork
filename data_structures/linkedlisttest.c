@@ -79,6 +79,53 @@ int lseg_binsearch(int x, list *start, list *end) {
     return -1;
 }
 
+/* Binary search on list segment in O(N) time complexity.
+ *
+ * The bin search above is O(NlogN) because the loop runs O(logN) times,
+ * and each time the ith() function takes O(N) time to walk the list from
+ * start to to the mid point.
+ *
+ * In this version, instead of walking the list each time from the start using
+ * ith(), we start walking the list from each updated start of the halved
+ * segments.
+ *
+ * Thus, the amount of walks to find the midpoint is
+ * n/2 + n/4 + n/8 + ... + 1 = O(n)
+ * and so the algorithm runs in O(n).
+ */
+int lseg_binsearch_linear(int x, list *start, list *end) {
+    assert(is_segment(start, end));
+    assert(is_sorted_lseg(start, end));
+
+    int len = lseg_len(start, end);
+    int left = 0;
+    int right = len;
+    while (left < right) {
+        list *mid = start;
+        int midInd = left + (right - left) / 2;
+
+        // Walk the list from start until mid
+        int i = midInd - left;
+        while (i > 0) {
+            assert(mid != NULL);
+            mid = mid -> next;
+            i--;
+        }
+
+        if (mid -> data == x) {
+            return midInd;
+        } else if (mid -> data < x) {
+            assert(mid != NULL);
+            start = mid -> next;
+            left = midInd + 1;
+        } else {
+            end = mid;  // Not strictly necessary but added for symmetry
+            right = midInd;
+        }
+    }
+    return -1;
+}
+
 int main() {
     // Create a new linked list
     list *A = malloc(sizeof(list));
@@ -142,6 +189,33 @@ int main() {
     assert(lseg_binsearch(0, A, C) == -1);
     assert(lseg_binsearch(2, C, E) == 1);
     assert(lseg_binsearch(6, C, E) == -1);
+
+    // Test lseg_binsearch_linear()
+    assert(lseg_binsearch_linear(3, A, C) == 0);
+    assert(lseg_binsearch_linear(8, A, C) == 1);
+    assert(lseg_binsearch_linear(0, A, C) == -1);
+    assert(lseg_binsearch_linear(2, C, E) == 1);
+    assert(lseg_binsearch_linear(6, C, E) == -1);
+
+    A->data = 0;
+    B->data = 1;
+    C->data = 2;
+    D->data = 3;
+    E->data = 4;
+    list *dummy = malloc(sizeof(list));
+    dummy->next = NULL;
+    E->next = dummy;
+    assert(lseg_binsearch(0, A, dummy) == 0);
+    assert(lseg_binsearch(1, A, dummy) == 1);
+    assert(lseg_binsearch(2, A, dummy) == 2);
+    assert(lseg_binsearch(3, A, dummy) == 3);
+    assert(lseg_binsearch(4, A, dummy) == 4);
+    assert(lseg_binsearch_linear(0, A, dummy) == 0);
+    assert(lseg_binsearch_linear(1, A, dummy) == 1);
+    assert(lseg_binsearch_linear(2, A, dummy) == 2);
+    assert(lseg_binsearch_linear(3, A, dummy) == 3);
+    assert(lseg_binsearch_linear(4, A, dummy) == 4);
+
 
     printf("Testing complete. No bugs found.\n");
 }
