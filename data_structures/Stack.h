@@ -23,7 +23,7 @@ bool stack_empty(stack_t S); // O(1)
 stack_t stack_new(); // O(1)
 
 // Destroy an existing stack.
-void stack_delete(stack_t S); // O(1)
+void stack_free(stack_t S); // O(1)
 
 // Enqueue element to back of stack.
 void push(stack_t S, ItemType x); // O(1)

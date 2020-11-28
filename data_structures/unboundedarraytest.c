@@ -33,7 +33,7 @@ int main() {
     assert(uba_len(A) == 0);
     assert(x == 10);
 
-    uba_delete(A);
+    uba_free(A);
 
     uba_t B = uba_new(0);
     int num_iters = 1000000;
@@ -53,6 +53,7 @@ int main() {
         assert(rem == (num_iters - i - 1) * 3);
         assert(uba_len(B) == (num_iters - i - 1));
     }
+    uba_free(B);
 
     printf("Testing complete. No bugs found.\n");
 }

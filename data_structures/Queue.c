@@ -50,7 +50,7 @@ queue *queue_new() {
  * @post: !is_queue(Q)
  * @param[in] Q: The queue.
  */
-void queue_delete(queue *Q) {
+void queue_free(queue *Q) {
     assert(is_queue(Q));
 
     // Delete all list nodes

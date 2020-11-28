@@ -63,7 +63,7 @@ uba_t uba_new(int size) {
  * @post: !is_uba(A)
  * @param[in] A: The uba.
  */
-void uba_delete(uba *A) {
+void uba_free(uba *A) {
     assert(is_uba(A));
     free(A->data);
     free(A);
@@ -106,7 +106,7 @@ void uba_set(uba *A, int i, ItemType x) {
  *
  * @pre: A != NULL  (is_uba(A) would be incorrect b/c size == limit may be true)
  * @pre: 0 <= A->size && A->size < new_limit
- * @pre: post: is_uba(A)   (Restores data structure invariant)
+ * @post: is_uba(A)   (Restores data structure invariant)
  */
 void uba_resize(uba *A, int new_limit) {
     assert(A != NULL);

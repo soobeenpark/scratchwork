@@ -40,7 +40,7 @@ int main() {
     assert(x == 6);
     assert(queue_empty(q));
 
-    queue_delete(q);
+    queue_free(q);
 
     printf("Testing complete. No bugs found.\n");
 }

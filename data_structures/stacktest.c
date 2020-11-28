@@ -21,7 +21,7 @@ bool is_stack_sorted(stack_t S, bool sort_ascending) {
     while (!stack_empty(tmp)) {
         push(S, pop(tmp));
     }
-    stack_delete(tmp);
+    stack_free(tmp);
     return is_sorted;
 }
 
@@ -66,8 +66,8 @@ void stack_sort(stack_t S) {
         push(S, pop(reversed));
     }
 
-    stack_delete(reversed);
-    stack_delete(tmp);
+    stack_free(reversed);
+    stack_free(tmp);
 }
 
 void test_stack_sort() {
@@ -86,7 +86,7 @@ void test_stack_sort() {
     assert(pop(st) == 1);
     assert(stack_empty(st));
 
-    stack_delete(st);
+    stack_free(st);
 }
 
 int main() {
@@ -128,7 +128,7 @@ int main() {
     assert(x == 5);
     assert(stack_empty(st));
 
-    stack_delete(st);
+    stack_free(st);
 
     test_stack_sort();
 

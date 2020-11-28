@@ -49,7 +49,7 @@ stack *stack_new() {
  * @post: !is_stack(S)
  * @param[in] S: The stack.
  */
-void stack_delete(stack *S) {
+void stack_free(stack *S) {
     assert(is_stack(S));
 
     // Delete all list nodes

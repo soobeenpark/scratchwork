@@ -29,7 +29,7 @@ int uba_len(uba_t A); // O(1)
 uba_t uba_new(int size); // O(1)
 
 // Destroy an existing unbounded array.
-void uba_delete(uba_t A); // O(1)
+void uba_free(uba_t A); // O(1)
 
 // Get an element at index i.
 ItemType uba_get(uba_t A, int i); // O(1)

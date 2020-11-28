@@ -108,18 +108,18 @@ int lseg_binsearch_linear(int x, list *start, list *end) {
         int i = midInd - left;
         while (i > 0) {
             assert(mid != NULL);
-            mid = mid -> next;
+            mid = mid->next;
             i--;
         }
 
-        if (mid -> data == x) {
+        if (mid->data == x) {
             return midInd;
-        } else if (mid -> data < x) {
+        } else if (mid->data < x) {
             assert(mid != NULL);
-            start = mid -> next;
+            start = mid->next;
             left = midInd + 1;
         } else {
-            end = mid;  // Not strictly necessary but added for symmetry
+            end = mid; // Not strictly necessary but added for symmetry
             right = midInd;
         }
     }
@@ -215,7 +215,6 @@ int main() {
     assert(lseg_binsearch_linear(2, A, dummy) == 2);
     assert(lseg_binsearch_linear(3, A, dummy) == 3);
     assert(lseg_binsearch_linear(4, A, dummy) == 4);
-
 
     printf("Testing complete. No bugs found.\n");
 }

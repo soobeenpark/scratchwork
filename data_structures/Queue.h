@@ -24,7 +24,7 @@ bool queue_empty(queue_t Q); // O(1)
 queue_t queue_new(); // O(1)
 
 // Destroy an existing queue.
-void queue_delete(queue_t Q); // O(1)
+void queue_free(queue_t Q); // O(1)
 
 // Enqueue element to back of queue.
 void enq(queue_t Q, ItemType x); // O(1)
