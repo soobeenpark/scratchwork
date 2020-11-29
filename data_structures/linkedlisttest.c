@@ -11,7 +11,7 @@ bool is_sum(list *start, list *end, int sum) {
 
     int accum = 0;
     while (start != end) {
-        accum += start->data;
+        accum += *(int *)start->data;
         start = start->next;
     }
     return accum == sum;
@@ -34,7 +34,7 @@ ItemType ith(list *l, int i) {
         i--;
     }
     assert(false); // Input param i was too large.
-    return -1;
+    return NULL;
 }
 
 // Returns true if element is in list segment [start, end).
@@ -42,7 +42,7 @@ bool is_in_lseg(int x, list *start, list *end) {
     assert(is_segment(start, end));
     if (start == end)
         return false;
-    return start->data == x || is_in_lseg(x, start->next, end);
+    return *(int *)(start->data) == x || is_in_lseg(x, start->next, end);
 }
 
 // Returns true if the input list segment is sorted in ascending order.
@@ -50,9 +50,9 @@ bool is_sorted_lseg(list *start, list *end) {
     assert(is_segment(start, end));
     int prev_item = INT_MIN;
     while (start != end) {
-        if (start->data < prev_item)
+        if (*(int *)(start->data) < prev_item)
             return false;
-        prev_item = start->data;
+        prev_item = *(int *)start->data;
         start = start->next;
     }
     return true;
@@ -68,9 +68,9 @@ int lseg_binsearch(int x, list *start, list *end) {
     int right = len;
     while (left < right) {
         int mid = left + (right - left) / 2;
-        if (ith(start, mid) == x) {
+        if (*(int *)(ith(start, mid)) == x) {
             return mid;
-        } else if (ith(start, mid) < x) {
+        } else if (*(int *)(ith(start, mid)) < x) {
             left = mid + 1;
         } else {
             right = mid;
@@ -112,9 +112,9 @@ int lseg_binsearch_linear(int x, list *start, list *end) {
             i--;
         }
 
-        if (mid->data == x) {
+        if (*(int *)mid->data == x) {
             return midInd;
-        } else if (mid->data < x) {
+        } else if (*(int *)mid->data < x) {
             assert(mid != NULL);
             start = mid->next;
             left = midInd + 1;
@@ -124,6 +124,11 @@ int lseg_binsearch_linear(int x, list *start, list *end) {
         }
     }
     return -1;
+}
+
+void free_list_node(list *node) {
+    free(node->data);
+    free(node);
 }
 
 int main() {
@@ -156,11 +161,16 @@ int main() {
     assert(!is_segment(NULL, NULL));
 
     // Test is_sum()
-    A->data = 3;
-    B->data = 8;
-    C->data = -1;
-    D->data = 2;
-    E->data = 5;
+    A->data = malloc(sizeof(int));
+    *(int *)A->data = 3;
+    B->data = malloc(sizeof(int));
+    *(int *)B->data = 8;
+    C->data = malloc(sizeof(int));
+    *(int *)C->data = -1;
+    D->data = malloc(sizeof(int));
+    *(int *)D->data = 2;
+    E->data = malloc(sizeof(int));
+    *(int *)E->data = 5;
     assert(is_sum(A, A, 0));
     assert(is_sum(A, B, 3));
     assert(is_sum(B, D, 7));
@@ -171,8 +181,8 @@ int main() {
     assert(lseg_len(B, E) == 3);
 
     // Test ith()
-    assert(ith(A, 0) == 3);
-    assert(ith(B, 2) == 2); // D node's data
+    assert(*(int *)ith(A, 0) == 3);
+    assert(*(int *)ith(B, 2) == 2); // D node's data
 
     // Test is_in_lseg()
     assert(is_in_lseg(3, A, E) && is_in_lseg(-1, A, E));
@@ -197,11 +207,11 @@ int main() {
     assert(lseg_binsearch_linear(2, C, E) == 1);
     assert(lseg_binsearch_linear(6, C, E) == -1);
 
-    A->data = 0;
-    B->data = 1;
-    C->data = 2;
-    D->data = 3;
-    E->data = 4;
+    *(int *)A->data = 0;
+    *(int *)B->data = 1;
+    *(int *)C->data = 2;
+    *(int *)D->data = 3;
+    *(int *)E->data = 4;
     list *dummy = malloc(sizeof(list));
     dummy->next = NULL;
     E->next = dummy;
@@ -215,6 +225,13 @@ int main() {
     assert(lseg_binsearch_linear(2, A, dummy) == 2);
     assert(lseg_binsearch_linear(3, A, dummy) == 3);
     assert(lseg_binsearch_linear(4, A, dummy) == 4);
+
+    free_list_node(A);
+    free_list_node(B);
+    free_list_node(C);
+    free_list_node(D);
+    free_list_node(E);
+    free_list_node(dummy);
 
     printf("Testing complete. No bugs found.\n");
 }

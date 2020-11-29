@@ -10,7 +10,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-typedef int ItemType;
+typedef void *ItemType;
 
 typedef struct uba_header uba;
 struct uba_header {

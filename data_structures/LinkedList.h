@@ -12,7 +12,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-typedef int ItemType;
+typedef void *ItemType;
 
 typedef struct list_node list;
 struct list_node {

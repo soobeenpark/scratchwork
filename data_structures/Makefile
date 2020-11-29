@@ -1,6 +1,6 @@
 CC = clang
 CFLAGS = -I. -Wall -Wextra -Wshadow -Werror -std=c99 -pedantic -g
-#CFLAGS += -DDEBUG=1
+CFLAGS += -DDEBUG=1
 
 linkedlist:
 	$(CC) -o linkedlist.bin LinkedList.c linkedlisttest.c $(CFLAGS)
