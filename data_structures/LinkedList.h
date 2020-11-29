@@ -12,11 +12,11 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-typedef void *ItemType;
+typedef void *elem;
 
 typedef struct list_node list;
 struct list_node {
-    ItemType data;
+    elem data;
     list *next;
 };
 

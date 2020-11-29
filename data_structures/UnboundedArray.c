@@ -49,7 +49,7 @@ uba_t uba_new(int size) {
 
     uba *A = malloc(sizeof(uba));
     int limit = (size == 0) ? 1 : size * 2;
-    A->data = calloc(limit, sizeof(ItemType));
+    A->data = calloc(limit, sizeof(elem));
     A->size = size;
     A->limit = limit;
 
@@ -63,9 +63,10 @@ uba_t uba_new(int size) {
  * @post: !is_uba(A)
  * @param[in] A: The uba.
  */
-void uba_free(uba *A) {
+void uba_free(uba *A, elem_free_fn *Fr) {
     assert(is_uba(A));
-    free(A->data);
+    if (Fr != NULL)
+        (*Fr)(A->data);
     free(A);
 }
 
@@ -78,7 +79,7 @@ void uba_free(uba *A) {
  * @param[in] i: The index to the array.
  * @return: The element at index i
  */
-ItemType uba_get(uba *A, int i) {
+elem uba_get(uba *A, int i) {
     assert(is_uba(A));
     assert(i >= 0 && i < uba_len(A));
 
@@ -94,7 +95,7 @@ ItemType uba_get(uba *A, int i) {
  * @param[in] i: The index to the array.
  * @param[in] x: The element to insert at index i
  */
-void uba_set(uba *A, int i, ItemType x) {
+void uba_set(uba *A, int i, elem x) {
     assert(is_uba(A));
     assert(i >= 0 && i < uba_len(A));
 
@@ -112,7 +113,7 @@ void uba_resize(uba *A, int new_limit) {
     assert(A != NULL);
     assert(0 <= A->size && A->size < new_limit);
 
-    ItemType *B = malloc(sizeof(ItemType) * new_limit);
+    elem *B = malloc(sizeof(elem) * new_limit);
 
     // Copy items over
     for (int i = 0; i < A->size; i++) {
@@ -135,7 +136,7 @@ void uba_resize(uba *A, int new_limit) {
  * @param[in] A: The uba.
  * @param[in] x: The element to append to the end.
  */
-void uba_add(uba *A, ItemType x) {
+void uba_add(uba *A, elem x) {
     assert(is_uba(A));
 
     A->data[A->size++] = x;
@@ -157,11 +158,11 @@ void uba_add(uba *A, ItemType x) {
  * @post: is_uba(A)
  * @param[in] A: The uba.
  */
-ItemType uba_rem(uba *A) {
+elem uba_rem(uba *A) {
     assert(is_uba(A));
     assert(uba_len(A) > 0);
 
-    ItemType ret = A->data[--A->size];
+    elem ret = A->data[--A->size];
     if (A->size < A->limit / 4) {
         // Need to resize
         uba_resize(A, A->limit / 4); // Resize when quarter for amortized O(1)

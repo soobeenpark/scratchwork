@@ -49,13 +49,15 @@ stack *stack_new() {
  * @post: !is_stack(S)
  * @param[in] S: The stack.
  */
-void stack_free(stack *S) {
+void stack_free(stack *S, elem_free_fn *Fr) {
     assert(is_stack(S));
 
     // Delete all list nodes
     while (S->top != NULL) {
         list *to_delete = S->top;
         S->top = S->top->next;
+        if (Fr != NULL)
+            (*Fr)(to_delete->data);
         free(to_delete);
     }
     free(S); // Delete Stack
@@ -71,7 +73,7 @@ void stack_free(stack *S) {
  * @param[in] S: The stack
  * @param[in] x: The item being inserted.
  */
-void push(stack_t S, ItemType x) {
+void push(stack_t S, elem x) {
     assert(is_stack(S));
 
     list *to_insert = malloc(sizeof(list));
@@ -93,11 +95,11 @@ void push(stack_t S, ItemType x) {
  * @param[in] S: The stack
  * @return: The item being removed.
  */
-ItemType pop(stack_t S) {
+elem pop(stack_t S) {
     assert(is_stack(S));
     assert(!stack_empty(S));
 
-    ItemType x = S->top->data;
+    elem x = S->top->data;
     list *to_delete = S->top;
     S->top = S->top->next;
     free(to_delete);
@@ -114,7 +116,7 @@ ItemType pop(stack_t S) {
  * @param[in] S: The stack
  * @return: The item at the top.
  */
-ItemType peek(stack_t S) {
+elem peek(stack_t S) {
     assert(is_stack(S));
     return S->top->data;
 }

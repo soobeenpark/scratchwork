@@ -26,7 +26,7 @@ int lseg_len(list *start, list *end) {
 }
 
 // Returns ith index element.
-ItemType ith(list *l, int i) {
+elem ith(list *l, int i) {
     while (l != NULL) {
         if (i == 0)
             return l->data;

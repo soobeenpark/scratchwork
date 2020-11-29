@@ -1,6 +1,6 @@
 /* Hash Dictionary Interface
  *
- * O(1) average and amortized insertion and lookup operations.
+ * O(1) average and amortized insertion, lookup, and removal operations.
  *
  * Client is expected to define the types and operations under the
  * Client-defined Interface portion, so that the hash dictionary can suit their
@@ -67,8 +67,5 @@ void hdict_insert(hdict_t H, entry x); // O(1) average & amortized
 
 // Removes the entry from the hdict.
 entry hdict_remove(hdict *H, key k); // O(1) average & amortized.
-
-// Prints the elements and other details of the hdict.
-void hdict_print(hdict *H); // O(n)
 
 #endif /* HASH_DICTIONARY_H */

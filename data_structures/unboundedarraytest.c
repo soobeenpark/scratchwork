@@ -4,11 +4,19 @@
 
 #include "UnboundedArray.h"
 
+/******* Client-Defined Types and Operations *******/
+// Function to delete a queue element.
+void elem_free_int(elem x) {
+    int *to_delete = (int *)x;
+    free(to_delete);
+}
+/******* End Client-Defined Types and Operations *******/
+
 // Helper function for adding ints to uba
 void uba_add_int(uba_t A, int x) {
     int *ptr = malloc(sizeof(int));
     *ptr = x;
-    uba_add(A, (ItemType)ptr);
+    uba_add(A, (elem)ptr);
 }
 
 // Helper function for removing ints from uba
@@ -29,7 +37,7 @@ void uba_set_int(uba_t A, int i, int x) {
     free(uba_get(A, i));
     int *ptr = malloc(sizeof(int));
     *ptr = x;
-    uba_set(A, i, (ItemType)ptr);
+    uba_set(A, i, (elem)ptr);
 }
 
 int main() {
@@ -61,7 +69,7 @@ int main() {
     assert(uba_len(A) == 0);
     assert(x == 10);
 
-    uba_free(A);
+    uba_free(A, &elem_free_int);
 
     uba_t B = uba_new(0);
     int num_iters = 1000000;
@@ -81,7 +89,7 @@ int main() {
         assert(rem == (num_iters - i - 1) * 3);
         assert(uba_len(B) == (num_iters - i - 1));
     }
-    uba_free(B);
+    uba_free(B, &elem_free_int);
 
     printf("Testing complete. No bugs found.\n");
 }

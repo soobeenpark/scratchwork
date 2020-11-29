@@ -15,7 +15,7 @@ struct wcount {
 /* Extract key from entry.
  *
  * @pre: x != NULL && hastag(struct wcount*, x)
- * @post: result != NULL && hastag(string *, result)
+ * @post: result != NULL && hastag(char *, result)
  * @param[in] x: The entry that contains the whole record to be stored.
  * @return The key that is used to locate the entry.
  */
@@ -50,7 +50,7 @@ bool key_equiv_wcount(key k1, key k2) {
  *
  * Also see note about coherence in key_equiv().
  *
- * @pre: k != NULL && hastag(string *, k)
+ * @pre: k != NULL && hastag(char *, k)
  * @param[in] k: The key to be hashed.
  * @return The integer hash value.
  */

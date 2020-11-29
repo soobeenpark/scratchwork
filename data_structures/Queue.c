@@ -50,13 +50,15 @@ queue *queue_new() {
  * @post: !is_queue(Q)
  * @param[in] Q: The queue.
  */
-void queue_free(queue *Q) {
+void queue_free(queue *Q, elem_free_fn *Fr) {
     assert(is_queue(Q));
 
     // Delete all list nodes
     while (Q->front != Q->back) {
         list *to_delete = Q->front;
         Q->front = Q->front->next;
+        if (Fr != NULL)
+            (*Fr)(to_delete->data);
         free(to_delete);
     }
     free(Q->front); // Delete dummy node
@@ -73,7 +75,7 @@ void queue_free(queue *Q) {
  * @param[in] Q: The queue
  * @param[in] x: The item being inserted.
  */
-void enq(queue *Q, ItemType x) {
+void enq(queue *Q, elem x) {
     assert(is_queue(Q));
 
     Q->back->data = x;
@@ -94,11 +96,11 @@ void enq(queue *Q, ItemType x) {
  * @param[in] Q: The queue
  * @return: The item being removed.
  */
-ItemType deq(queue *Q) {
+elem deq(queue *Q) {
     assert(is_queue(Q));
     assert(!queue_empty(Q));
 
-    ItemType x = Q->front->data;
+    elem x = Q->front->data;
     list *to_delete = Q->front;
     Q->front = Q->front->next;
     free(to_delete);
@@ -115,7 +117,7 @@ ItemType deq(queue *Q) {
  * @param[in] Q: The queue
  * @return: The item at the front.
  */
-ItemType peek(queue_t Q) {
+elem peek(queue_t Q) {
     assert(is_queue(Q));
     return Q->front->data;
 }

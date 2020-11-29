@@ -3,11 +3,19 @@
 
 #include "Queue.h"
 
+/******* Client-Defined Types and Operations *******/
+// Function to delete a queue element.
+void elem_free_int(elem x) {
+    int *to_delete = (int *)x;
+    free(to_delete);
+}
+/******* End Client-Defined Types and Operations *******/
+
 // Helper function for enqueing ints onto queue
 void enq_int(queue_t Q, int x) {
     int *ptr = malloc(sizeof(int));
     *ptr = x;
-    enq(Q, (ItemType)ptr);
+    enq(Q, (elem)ptr);
 }
 
 // Helper function for dequeing ints from queue
@@ -60,7 +68,7 @@ int main() {
     assert(x == 6);
     assert(queue_empty(q));
 
-    queue_free(q);
+    queue_free(q, &elem_free_int);
 
     printf("Testing complete. No bugs found.\n");
 }

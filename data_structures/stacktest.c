@@ -6,6 +6,14 @@
 
 enum SortOrder { ASCENDING = true, DESCENDING = false };
 
+/******* Client-Defined Types and Operations *******/
+// Function to delete a queue element.
+void elem_free_int(elem x) {
+    int *to_delete = (int *)x;
+    free(to_delete);
+}
+/******* End Client-Defined Types and Operations *******/
+
 /********** Exercises (15-122 Notes) **********/
 // Returns true if stack sorted in order specified by parameter.
 bool is_stack_sorted(stack_t S, bool sort_ascending) {
@@ -13,7 +21,7 @@ bool is_stack_sorted(stack_t S, bool sort_ascending) {
     bool is_sorted = true;
     int prev_item = sort_ascending ? INT_MAX : INT_MIN;
     while (is_sorted && !stack_empty(S)) {
-        ItemType item = pop(S);
+        elem item = pop(S);
         is_sorted = sort_ascending ? (*(int *)item < prev_item)
                                    : (*(int *)item > prev_item);
         push(tmp, item);
@@ -22,7 +30,7 @@ bool is_stack_sorted(stack_t S, bool sort_ascending) {
     while (!stack_empty(tmp)) {
         push(S, pop(tmp));
     }
-    stack_free(tmp);
+    stack_free(tmp, &elem_free_int);
     return is_sorted;
 }
 
@@ -30,7 +38,7 @@ bool is_stack_sorted(stack_t S, bool sort_ascending) {
 int stack_size(stack_t S) {
     if (stack_empty(S))
         return 0;
-    ItemType item = pop(S);
+    elem item = pop(S);
     int size = 1 + stack_size(S);
     push(S, item);
     return size;
@@ -49,7 +57,7 @@ void stack_sort(stack_t S) {
     // Insertion sort variant
     while (!stack_empty(S)) {
         assert(is_stack_sorted(reversed, DESCENDING)); // Loop invariant
-        ItemType item = pop(S);
+        elem item = pop(S);
         while (!stack_empty(reversed) &&
                *(int *)peek(reversed) < *(int *)item) {
             assert(is_stack_sorted(tmp, ASCENDING)); // Loop Invariant
@@ -68,15 +76,15 @@ void stack_sort(stack_t S) {
         push(S, pop(reversed));
     }
 
-    stack_free(reversed);
-    stack_free(tmp);
+    stack_free(reversed, &elem_free_int);
+    stack_free(tmp, &elem_free_int);
 }
 
 // Helper function for pushing ints onto stack
 void push_int(stack_t S, int x) {
     int *ptr = malloc(sizeof(int));
     *ptr = x;
-    push(S, (ItemType)ptr);
+    push(S, (elem)ptr);
 }
 
 // Helper function for popping ints from stack
@@ -110,7 +118,7 @@ void test_stack_sort() {
     assert(pop_int(st) == 1);
     assert(stack_empty(st));
 
-    stack_free(st);
+    stack_free(st, &elem_free_int);
 }
 
 int main() {
@@ -152,7 +160,7 @@ int main() {
     assert(x == 5);
     assert(stack_empty(st));
 
-    stack_free(st);
+    stack_free(st, &elem_free_int);
 
     test_stack_sort();
 

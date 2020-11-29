@@ -8,6 +8,11 @@
 
 #include "LinkedList.h"
 
+/******* Client-defined Interface *******/
+// Function to delete the entry.
+typedef void elem_free_fn(elem x);
+
+/******* Library Interface *******/
 typedef struct stack_header stack;
 struct stack_header {
     list *top;
@@ -23,15 +28,15 @@ bool stack_empty(stack_t S); // O(1)
 stack_t stack_new(); // O(1)
 
 // Destroy an existing stack.
-void stack_free(stack_t S); // O(1)
+void stack_free(stack_t S, elem_free_fn *Fr); // O(1)
 
 // Enqueue element to back of stack.
-void push(stack_t S, ItemType x); // O(1)
+void push(stack_t S, elem x); // O(1)
 
 // Dequeue from front of stack.
-ItemType pop(stack_t S); // O(1)
+elem pop(stack_t S); // O(1)
 
 // Get top element of stack without popping.
-ItemType peek(stack_t S); // O(1)
+elem peek(stack_t S); // O(1)
 
 #endif /* STACK_H */
