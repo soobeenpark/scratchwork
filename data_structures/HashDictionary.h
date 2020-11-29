@@ -14,20 +14,20 @@
 #include <stdlib.h>
 
 /******* Client-defined Interface *******/
-typedef struct wcount {
-    char *word;
-    int count;
-} * entry;
-typedef char *key;
+typedef void *entry;
+typedef void *key;
 
 // Extract key from entry.
-key entry_key(entry x);
+typedef key entry_key_fn(entry x);
 
 // Compare two keys for equivalence.
-bool key_equiv(key k1, key k2);
+typedef bool key_equiv_fn(key k1, key k2);
 
 // Hash function for key that returns integer.
-int key_hash(key k);
+typedef int key_hash_fn(key k);
+
+// Function to delete the entry.
+typedef void entry_free_fn(entry e);
 
 /******* Library Interface *******/
 typedef struct chain_node chain;
@@ -41,16 +41,22 @@ struct hdict_header {
     int size;      // 0 <= size
     int capacity;  // 0 < capacity
     chain **table; // length(table) == capacity
+
+    entry_key_fn *entry_key; // != NULL
+    key_equiv_fn *equiv;     // != NULL
+    key_hash_fn *hash;       // != NULL
 };
 
 // Client side type
 typedef hdict *hdict_t;
 
 // Create new hash dictionary.
-hdict_t hdict_new(int initial_capacity); // O(1)
+hdict_t hdict_new(int initial_capacity, entry_key_fn *entry_key,
+                  key_equiv_fn *equiv,
+                  key_hash_fn *hash); // O(1)
 
 // Destroy an existing hash dictionary.
-void hdict_free(hdict_t H); // O(1)
+void hdict_free(hdict_t H, entry_free_fn *Fr); // O(1)
 
 // Lookup entry in hash dictionary.
 // If entry exists, that entry is returned. If doesn't exist, NULL is returned.

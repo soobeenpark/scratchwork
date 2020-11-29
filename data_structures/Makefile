@@ -1,6 +1,6 @@
 CC = clang
 CFLAGS = -I. -Wall -Wextra -Wshadow -Werror -std=c99 -pedantic -g
-CFLAGS_DEBUG = -DDEBUG=1
+#CFLAGS += -DDEBUG=1
 
 linkedlist:
 	$(CC) -o linkedlist.bin LinkedList.c linkedlisttest.c $(CFLAGS)
@@ -15,7 +15,7 @@ unboundedarray:
 	$(CC) -o unboundedarray.bin UnboundedArray.c unboundedarraytest.c $(CFLAGS)
 
 hashdictionary:
-	$(CC) -o hashdictionary.bin HashDictionary.c hashdictionarytest.c $(CFLAGS) $(CFLAGS_DEBUG)
+	$(CC) -o hashdictionary.bin HashDictionary.c hashdictionarytest.c $(CFLAGS)
 
 clean:
 	rm -rf *.bin

@@ -58,71 +58,29 @@ const double MAX_LOAD_FACTOR = 4.0;
  */
 const double MIN_LOAD_FACTOR = 0.7;
 
-/******* Client-defined Implementation *******/
-/* Extract key from entry.
- *
- * @pre: x != NULL
- * @param[in] x: The entry that contains the whole record to be stored.
- * @return The key that is used to locate the entry.
- */
-key entry_key(entry x) {
-    dbg_requires(x != NULL);
-    return x->word;
-}
-
-/* Compare two keys for equivalence.
- *
- * To ensure coherence, two keys considered equivalent should hash
- * to the same value when the hash function key_hash() is applied.
- *
- * @pre: k1 != NULL && k2 != NULL
- * @param[in] k1: The first key.
- * @param[in] k2: The second key.
- * @return true if keys are equivalent, false otherwise.
- */
-bool key_equiv(key k1, key k2) {
-    dbg_requires(k1 != NULL && k2 != NULL);
-    return (strcmp(k1, k2) == 0);
-}
-
-/* Hash function for key that returns integer.
- *
- * Choice of hash function is crucial in creating correct and efficient O(1)
- * hash table implementation.
- * Especially, hash functions should aim to map keys to the target integer
- * values with a uniform probability distribution, to give the best chance
- * to avoid keys clustering around a particular hash table index.
- *
- * Also see note about coherence in key_equiv().
- *
- * @pre: k != NULL
- * @param[in] k: The key to be hashed.
- * @return The integer hash value.
- */
-int key_hash(key k) {
-    dbg_requires(k != NULL);
-
-    // Some versions of Java use this as their default string hashing function.
-    // Note that this particularhash function doesn't involve psuedo-random
-    // number generators.
-    int h = 0;
-    size_t len = strlen(k);
-    for (size_t i = 0; i < len; i++) {
-        int ch = k[i]; // Convert to ASCII value
-        h *= 31;
-        h += ch;
-    }
-    return h;
-}
-
 /******* Library Implementation *******/
+/* Helper function to call H->entry_key */
+key entry_key(hdict *H, entry x) {
+    return (*H->entry_key)(x);
+}
+
+/* Helper function to call H->hash */
+bool key_equiv(hdict *H, key k1, key k2) {
+    return (*H->equiv)(k1, k2);
+}
+
+/* Helper function to call H->hash */
+int key_hash(hdict *H, key k) {
+    return (*H->hash)(k);
+}
+
 /* Helper function to retrieve bucket index given the key.
  *
  * @pre: is_dict(H)
  * @post: 0 <= result && result < H->capacity
  */
 int index_of_key(hdict *H, key k) {
-    return abs(key_hash(k) % (H->capacity));
+    return abs(key_hash(H, k) % (H->capacity));
 }
 
 /* @brief Checks if the hdict is valid (data structure invariant).
@@ -143,16 +101,12 @@ bool is_hdict(hdict *H) {
                 if (x == NULL)
                     return false;
 
-                // Check each entry representation invariant
-                if (x->count < 0 || strlen(x->word) <= 0)
-                    return false;
-
                 // Check there are no duplicate keys
                 // (Skip because computationally expensive)
 
                 // Check that each entry's key in the bucket chain hashes
                 // to this bucket index
-                if (index_of_key(H, entry_key(x)) != bucket_ind) {
+                if (index_of_key(H, entry_key(H, x)) != bucket_ind) {
                     return false;
                 }
 
@@ -165,7 +119,8 @@ bool is_hdict(hdict *H) {
     }
 
     return (H != NULL) && (H->size >= 0) && (H->capacity > 0) &&
-           (node_count == H->size);
+           (node_count == H->size) && (H->entry_key != NULL) &&
+           (H->hash != NULL) && (H->equiv != NULL);
 }
 
 /* Create new hash dictionary.
@@ -174,13 +129,20 @@ bool is_hdict(hdict *H) {
  * @post: is_hdict(result)
  * @return: The initialized hdict.
  */
-hdict *hdict_new(int initial_capacity) {
+hdict *hdict_new(int initial_capacity, entry_key_fn *entry_key,
+                 key_equiv_fn *equiv, key_hash_fn *hash) {
     dbg_requires(initial_capacity > 0);
+    dbg_requires(entry_key != NULL && hash != NULL && equiv != NULL);
 
     hdict *H = malloc(sizeof(hdict));
     H->size = 0;
     H->capacity = initial_capacity;
     H->table = calloc(initial_capacity, sizeof(chain *));
+
+    // Set function pointers
+    H->entry_key = entry_key;
+    H->hash = hash;
+    H->equiv = equiv;
 
     dbg_ensures(is_hdict(H));
     return H;
@@ -192,7 +154,7 @@ hdict *hdict_new(int initial_capacity) {
  * @post: !is_hdict(H)
  * @param[in] H: The hdict.
  */
-void hdict_free(hdict *H) {
+void hdict_free(hdict *H, entry_free_fn *Fr) {
     dbg_requires(is_hdict(H));
 
     // Free all nodes in each bucket
@@ -201,6 +163,9 @@ void hdict_free(hdict *H) {
         while (iter != NULL) {
             chain *to_delete = iter;
             iter = iter->next;
+            if (Fr != NULL) {
+                (*Fr)(to_delete->data);
+            }
             free(to_delete);
         }
     }
@@ -232,7 +197,7 @@ void hdict_resize(hdict *H, int new_capacity) {
             entry x = iter->data;
             dbg_assert(x != NULL); // Valid entry shouldn't be NULL
 
-            int new_hash_ind = index_of_key(H, entry_key(x));
+            int new_hash_ind = index_of_key(H, entry_key(H, x));
 
             // Reinsert node into new table
             chain *to_reinsert = iter;
@@ -265,9 +230,9 @@ entry hdict_lookup(hdict_t H, key k) {
     // Iterate through chain looking for entry
     for (chain *iter = H->table[ind]; iter != NULL; iter = iter->next) {
         entry x = iter->data;
-        if (key_equiv(k, entry_key(x))) {
+        if (key_equiv(H, k, entry_key(H, x))) {
             dbg_ensures(is_hdict(H));
-            dbg_ensures(x != NULL && key_equiv(entry_key(x), k));
+            dbg_ensures(x != NULL && key_equiv(H, entry_key(H, x), k));
             return x;
         }
     }
@@ -290,7 +255,7 @@ void hdict_insert(hdict_t H, entry x) {
     dbg_requires(is_hdict(H));
     dbg_requires(x != NULL);
 
-    int ind = index_of_key(H, entry_key(x));
+    int ind = index_of_key(H, entry_key(H, x));
     bool found = false;
 
     // Iterate through chain looking for entry
@@ -298,7 +263,7 @@ void hdict_insert(hdict_t H, entry x) {
          iter = iter->next) {
         entry old = iter->data;
         dbg_assert(old != NULL);
-        if (key_equiv(entry_key(x), entry_key(old))) {
+        if (key_equiv(H, entry_key(H, x), entry_key(H, old))) {
             iter->data = x;
             found = true;
         }
@@ -319,7 +284,7 @@ void hdict_insert(hdict_t H, entry x) {
         hdict_resize(H, 2 * (H->capacity)); // double the capacity
     }
     dbg_ensures(is_hdict(H));
-    dbg_ensures(hdict_lookup(H, entry_key(x)) == x);
+    dbg_ensures(hdict_lookup(H, entry_key(H, x)) == x);
     dbg_ensures(H->size > 0);
 }
 
@@ -346,7 +311,7 @@ entry hdict_remove(hdict *H, key k) {
     chain *curr = H->table[ind];
     chain *prev;
     while (curr != NULL) {
-        if (key_equiv(entry_key(curr->data), k)) {
+        if (key_equiv(H, entry_key(H, curr->data), k)) {
             entry x = curr->data;
 
             // Remove chain node from table
@@ -366,7 +331,7 @@ entry hdict_remove(hdict *H, key k) {
 
             dbg_ensures(is_hdict(H));
             dbg_ensures(hdict_lookup(H, k) == NULL);
-            dbg_ensures(x != NULL && key_equiv(entry_key(x), k));
+            dbg_ensures(x != NULL && key_equiv(H, entry_key(H, x), k));
             return x;
         }
 
@@ -376,32 +341,4 @@ entry hdict_remove(hdict *H, key k) {
 
     // Should not reach here
     return NULL;
-}
-
-/* Prints the elements and other details of the hdict.
- *
- * @pre: is_hdict(H)
- * @post: is_hdict(H)
- * @param[in] H: the hdict.
- */
-void hdict_print(hdict *H) {
-    dbg_requires(is_hdict(H));
-
-    fprintf(stdout, "size: %d\ncapacity: %d\n\n", H->size, H->capacity);
-    for (int i = 0; i < H->capacity; i++) {
-        fprintf(stdout, "Bucket %d: ", i);
-        chain *iter = H->table[i];
-        if (iter != NULL) {
-            fprintf(stdout, "<%s: %d>", iter->data->word, iter->data->count);
-            iter = iter->next;
-        }
-        while (iter != NULL) {
-            fprintf(stdout, " -> <%s: %d>", iter->data->word,
-                    iter->data->count);
-            iter = iter->next;
-        }
-        fprintf(stdout, "\n");
-    }
-
-    dbg_ensures(is_hdict(H));
 }
