@@ -1,6 +1,6 @@
 CC = clang
 CFLAGS = -I. -Wall -Wextra -Wshadow -Werror -std=c99 -pedantic -g
-#CFLAGS += -DDEBUG=1
+CFLAGS += -DDEBUG=1
 
 linkedlist:
 	$(CC) -o linkedlist.bin LinkedList.c linkedlisttest.c $(CFLAGS)
@@ -19,6 +19,9 @@ hashdictionary:
 
 hashset:
 	$(CC) -o hashset.bin HashSet.c hashsettest.c $(CFLAGS)
+
+binarysearchtree:
+	$(CC) -o binarysearchtree.bin BinarySearchTree.c binarysearchtreetest.c $(CFLAGS)
 
 clean:
 	rm -rf *.bin
