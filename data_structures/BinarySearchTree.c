@@ -148,7 +148,7 @@ tree *bst_insert(dict *D, tree *T, entry x) {
     return T;
 }
 
-/* Retireve minimum entry from BST.
+/* Retrieve minimum entry from BST.
  *
  * @pre: is_bst(T)
  * @post: is_bst(T)
@@ -156,7 +156,7 @@ tree *bst_insert(dict *D, tree *T, entry x) {
  * @return The minimum entry stored in the BST.
  */
 entry bst_find_min(dict *D, tree *T) {
-    dbg_ensures(is_bst(D, T));
+    dbg_requires(is_bst(D, T));
     if (T == NULL)
         return NULL;
 

@@ -104,11 +104,6 @@ int main() {
     printf("Beginning stress test... this may take a minute\n");
     printf("RUN WITH -DDEBUG=0 in compilation flags, otherwise too slow!\n");
 
-    // This particular stress test simulates the "worst case" for the BST.
-    // Since it is not self-sorting, the pattern of insertions will make the
-    // BST grow to be a linear linked list, which has O(n) lookup / insertion
-    // time.
-    // Thus, it is very slow.
     D = dict_new(&entry_key_wcount, &key_compare_wcount);
     printf("STRESS TEST: inserting");
     fflush(stdout);
@@ -117,7 +112,7 @@ int main() {
     for (int first = 'a'; first <= 'z'; first++) {
         printf("."); // Status bar
         fflush(stdout);
-        for (int second = 'a'; second <= 'z'; second++) {
+        for (int second = 'z'; second >= 'a'; second--) {
             for (int third = 'a'; third <= 'z'; third++) {
                 char str[4];
                 str[0] = first;

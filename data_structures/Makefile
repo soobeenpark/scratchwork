@@ -1,6 +1,6 @@
 CC = clang
-CFLAGS = -I. -Wall -Wextra -Wshadow -Werror -std=c99 -pedantic -g
-CFLAGS += -DDEBUG=1
+CFLAGS = -I. -Wall -Wextra -Wshadow -Werror -std=c99 -pedantic -g -ggdb
+#CFLAGS += -DDEBUG=1
 
 linkedlist:
 	$(CC) -o linkedlist.bin LinkedList.c linkedlisttest.c $(CFLAGS)
@@ -22,6 +22,9 @@ hashset:
 
 binarysearchtree:
 	$(CC) -o binarysearchtree.bin BinarySearchTree.c binarysearchtreetest.c $(CFLAGS)
+
+format:
+	clang-format -style=file -i *.c *.h
 
 clean:
 	rm -rf *.bin
