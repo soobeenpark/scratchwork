@@ -100,8 +100,7 @@ void increment_wordcount(hdict_t H, char *word) {
     }
 }
 
-// Insert the key into the dictionary and increment the count of the word by 1
-// in the entry.
+// Remove the key from the dictionary and decrement the count of the word by 1
 // @pre: word must have been previously counted in the hdict.
 void decrement_wordcount(hdict_t H, char *word) {
     struct wcount *x = (struct wcount *)hdict_lookup(H, (key)word);

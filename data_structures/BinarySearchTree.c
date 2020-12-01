@@ -148,6 +148,18 @@ tree *bst_insert(dict *D, tree *T, entry x) {
     return T;
 }
 
+/* Helper to retrieve tree node that contains minimum element in BST. */
+tree *bst_find_min_node(tree *T) {
+    if (T == NULL) {
+        return NULL;
+    }
+
+    while (T->left != NULL) {
+        T = T->left;
+    }
+    return T;
+}
+
 /* Retrieve minimum entry from BST.
  *
  * @pre: is_bst(T)
@@ -157,14 +169,84 @@ tree *bst_insert(dict *D, tree *T, entry x) {
  */
 entry bst_find_min(dict *D, tree *T) {
     dbg_requires(is_bst(D, T));
+
+    tree *min_node = bst_find_min_node(T);
+    if (min_node == NULL)
+        return NULL;
+
+    dbg_ensures(is_bst(D, T));
+    return min_node->data;
+}
+
+/* Removes entry from BST.
+ *
+ * @pre: is_bst(T)
+ * @pre: T != NULL && entry_key(bst_lookup(T, k)) == k
+ * @post: bst_lookup(T, k) == NULL
+ * @param[in] T: The BST.
+ * @param[in] k: The key of the entry to remove.
+ * @param[in] Fr: The function to free the entry from memory.
+ * @return: The removed entry.
+ */
+tree *bst_remove(dict *D, tree *T, key k, entry_free_fn *Fr) {
+    dbg_requires(is_bst(D, T));
+    dbg_requires(entry_key(D, bst_lookup(D, T, k)) == k);
+
+    // Traverse the tree until we reach the node that must be deleted
     if (T == NULL)
         return NULL;
 
-    while (T->left != NULL) {
-        T = T->left;
+    int cmp = key_compare(D, k, entry_key(D, T->data));
+    if (cmp < 0) {
+        T->left = bst_remove(D, T->left, k, Fr);
+        return T;
+    } else if (cmp > 0) {
+        T->right = bst_remove(D, T->right, k, Fr);
+        return T;
     }
-    dbg_ensures(is_bst(D, T));
-    return T->data;
+
+    dbg_assert(cmp == 0);
+    // T is now the node to remove
+    // Get tree node to return
+    tree *to_return;
+    if (T->left == NULL && T->right == NULL) {
+        // Case 1 - T has no children nodes (T is a leaf)
+        to_return = NULL;
+    } else if (T->left != NULL && T->right == NULL) {
+        // Case 2a - T only has left child
+        to_return = T->left;
+    } else if (T->left == NULL && T->right != NULL) {
+        // Case 2b - T only has right child
+        to_return = T->right;
+    } else {
+        // Case 3 - T has both children nodes
+        dbg_assert(T->right != NULL);
+
+        // Find successor to take over T
+        // The node with sucessor is guaranteed to have only right child
+        tree *successor_node = bst_find_min_node(T->right);
+        dbg_assert(successor_node->left == NULL);
+
+        // Swap entries
+        entry tmp = T->data;
+        T->data = successor_node->data;
+        successor_node->data = tmp;
+
+        // Recursive call - removing node now guaranteed to be in
+        // Case 1 or 2 after swap
+        return bst_remove(D, T->right, k, Fr);
+    }
+
+    // Free node and return entry
+    entry x = T->data;
+    if (*Fr != NULL) {
+        (*Fr)(x);
+    }
+    free(T);
+
+    dbg_ensures(is_bst(D, to_return));
+    dbg_ensures(bst_lookup(D, to_return, k) == NULL);
+    return to_return;
 }
 
 /* Deletes instantiated BST.
@@ -250,7 +332,7 @@ entry dict_lookup(dict_t D, key k) {
  * @pre: x != NULL
  * @post: is_dict(D)
  * @post: dict_lookup(D, entry_key(x)) == x
- * @post: D->size > 0
+ * @post: dict_size(D) > 0
  * @param[in] D: The dict.
  * @param[in] x: The entry to insert.
  */
@@ -263,7 +345,25 @@ void dict_insert(dict_t D, entry x) {
 
     dbg_ensures(is_dict(D));
     dbg_ensures(dict_lookup(D, entry_key(D, x)) == x);
-    dbg_ensures(D->size > 0);
+    dbg_ensures(dict_size(D) > 0);
+}
+
+/* Removes an entry from the BST dictionary.
+ *
+ * @pre: is_dict(D)
+ * @pre: entry_key(D, dict_lookup(D, k)) == k
+ * @pre: dict_size(D) > 0
+ * @post: is_dict(D)
+ * @post: dict_lookup(D, k) == NULL
+ * @param[in] D: The dict.
+ * @param[in] k: The key of the entry to insert.
+ */
+void dict_remove(dict *D, key k, entry_free_fn *Fr) {
+    dbg_requires(is_dict(D));
+    dbg_requires(entry_key(D, dict_lookup(D, k)) == k);
+    dbg_requires(dict_size(D) > 0);
+
+    D->root = bst_remove(D, D->root, k, Fr);
 }
 
 /* Find the minimum entry in the BST dictionary.

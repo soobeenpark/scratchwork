@@ -74,6 +74,17 @@ void increment_wordcount(dict_t D, char *word) {
     }
 }
 
+// Remove the key from the dictionary and decrement the count of the word by 1
+// @pre: word must have been previously counted in the hdict.
+void decrement_wordcount(dict_t D, char *word) {
+    struct wcount *x = (struct wcount *)dict_lookup(D, (key)word);
+    assert(x != NULL);
+    x->count--;
+    if (x->count == 0) {
+        dict_remove(D, entry_key_wcount(x), &entry_free_wcount);
+    }
+}
+
 int main() {
     // Test adding words
     dict_t D = dict_new(&entry_key_wcount, &key_compare_wcount);
@@ -97,6 +108,16 @@ int main() {
     assert(dict_size(D) == 3);
     assert(key_compare_wcount(entry_key_wcount(dict_find_min(D)), "Hello") ==
            0);
+
+    // Test removing words
+    decrement_wordcount(D, "World");
+    x = dict_lookup(D, (key) "World");
+    assert(x == NULL);
+
+    decrement_wordcount(D, "Hello");
+    x = dict_lookup(D, (key) "Hello");
+    assert(x != NULL && key_compare_wcount(entry_key_wcount(x), "Hello") == 0);
+    assert(((struct wcount *)x)->count == 1);
 
     dict_free(D, &entry_free_wcount);
 
@@ -132,6 +153,27 @@ int main() {
            0);
     assert(key_compare_wcount(entry_key_wcount(dict_lookup(D, "abc")), "xyz") <
            0);
+    printf("\n");
+
+    printf("STRESS TEST: deleting");
+    fflush(stdout);
+    for (int first = 'a'; first <= 'z'; first++) {
+        printf("."); // Status bar
+        fflush(stdout);
+        for (int second = 'a'; second <= 'z'; second++) {
+            for (int third = 'a'; third <= 'z'; third++) {
+                char str[4];
+                str[0] = first;
+                str[1] = second;
+                str[2] = third;
+                str[3] = '\0';
+                x = dict_lookup(D, (key)str);
+                assert(x != NULL && ((struct wcount *)x)->count == 1);
+
+                decrement_wordcount(D, str);
+            }
+        }
+    }
     printf("\n");
 
     dict_free(D, &entry_free_wcount);

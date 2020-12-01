@@ -63,6 +63,9 @@ entry dict_lookup(dict_t D, key k); // O(logn) average
 // Insert an entry into the BST dictionary.
 void dict_insert(dict_t D, entry x); // O(logn) average
 
+// Removes an entry from the BST dictionary.
+void dict_remove(dict *D, key k, entry_free_fn *Fr);
+
 // Find the minimum entry in the BST dictionary.
 entry dict_find_min(dict_t D); // O(logn) average
 
