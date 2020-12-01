@@ -23,6 +23,9 @@ hashset:
 binarysearchtree:
 	$(CC) -o binarysearchtree.bin BinarySearchTree.c binarysearchtreetest.c $(CFLAGS)
 
+avltree:
+	$(CC) -o avltree.bin AVLTree.c avltreetest.c $(CFLAGS)
+
 format:
 	clang-format -style=file -i *.c *.h
 
