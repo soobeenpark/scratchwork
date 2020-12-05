@@ -1,6 +1,6 @@
 CC = clang
 CFLAGS = -I. -Wall -Wextra -Wshadow -Werror -std=c99 -pedantic -g -ggdb
-#CFLAGS += -DDEBUG=1
+CFLAGS += -DDEBUG=1
 
 linkedlist:
 	$(CC) -o linkedlist.bin LinkedList.c linkedlisttest.c $(CFLAGS)
@@ -25,6 +25,9 @@ binarysearchtree:
 
 avltree:
 	$(CC) -o avltree.bin AVLTree.c avltreetest.c $(CFLAGS)
+
+priorityqueue:
+	$(CC) -o priorityqueue.bin PriorityQueue.c priorityqueuetest.c $(CFLAGS)
 
 format:
 	clang-format -style=file -i *.c *.h

@@ -20,8 +20,16 @@ typedef bool has_higher_priority_fn(elem e1, elem e2);
 typedef void elem_free_fn(elem x);
 
 /******* Library Interface *******/
+typedef struct heap_header heap;
+struct heap_header {
+    int limit;                    // == capacity + 1
+    int next;                     // 1 <= next && next <= limit
+    elem *data;                   // length(data) == limit
+    has_higher_priority_fn *prio; // != NULL
+};
+
 // Client side type
-typedef int *pq_t;
+typedef heap *pq_t;
 
 // Checks if the pq is empty.
 bool pq_empty(pq_t Q); // O(1)
