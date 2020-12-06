@@ -40,7 +40,8 @@ int pq_peek_int(pq_t Q) {
 }
 
 int main() {
-    pq_t q = pq_new(10000, has_higher_priority_int);
+    int capacity = 10000;
+    pq_t q = pq_new(capacity, has_higher_priority_int);
     assert(pq_empty(q));
 
     pq_add_int(q, 5);
@@ -77,6 +78,45 @@ int main() {
     assert(pq_empty(q));
 
     pq_free(q, &elem_free_int);
+
+    // STRESS TEST
+    // run heapsort on mixed even -> odd array
+    printf("Running stress test\n");
+    q = pq_new(capacity, has_higher_priority_int);
+    printf("Inserting");
+    for (int i = 0; i < capacity; i += 2) {
+        if (i % 1000 == 0) {
+            printf(".");
+            fflush(stdout);
+        }
+        pq_add_int(q, i);
+    }
+    for (int i = 1; i < capacity; i += 2) {
+        if (i % 1000 == 1) {
+            printf(".");
+            fflush(stdout);
+        }
+        pq_add_int(q, i);
+    }
+    assert(pq_full(q));
+
+    printf("\nRemoving");
+    int arr[capacity];
+    for (int i = 0; i < capacity; i++) {
+        if (i % 500 == 0) {
+            printf(".");
+            fflush(stdout);
+        }
+        // heapsort
+        arr[i] = pq_rem_int(q);
+    }
+    assert(pq_empty(q));
+    for (int i = 1; i < capacity; i++) {
+        // check if sorted
+        assert(arr[i - 1] < arr[i]);
+        assert(arr[i] == i);
+    }
+    printf("\n");
 
     printf("Testing complete. No bugs found.\n");
 }

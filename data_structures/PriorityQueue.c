@@ -60,6 +60,24 @@ bool ok_above(heap *H, int parent, int child) {
     return !(*H->prio)(child_elem, parent_elem);
 }
 
+bool is_heap_ordered_helper(heap *H, int parent) {
+    int left = parent * 2;
+    int right = parent * 2 + 1;
+
+    if (left >= H->next) {
+        // No children
+        return true;
+    }
+    if (right == H->next) {
+        // Only left child
+        return ok_above(H, parent, left) && is_heap_ordered_helper(H, left);
+    } else {
+        // Both children
+        return ok_above(H, parent, left) && is_heap_ordered_helper(H, left) &&
+               ok_above(H, parent, right) && is_heap_ordered_helper(H, right);
+    }
+}
+
 /* @brief Checks heap ordering invariant (for all nodes).
  *
  * @pre: is_heap_safe(H)
@@ -67,6 +85,11 @@ bool ok_above(heap *H, int parent, int child) {
  * @return true if heap ordering invariant is valid.
  */
 bool is_heap_ordered(heap *H) {
+    // Recursive
+    return is_heap_ordered_helper(H, 1);
+
+    // Iterative
+    /*
     for (int child = 2; child < H->next; child++) {
         dbg_assert(2 <= child && child <= H->next); // Loop Invariant
         int parent = child / 2;
@@ -75,6 +98,7 @@ bool is_heap_ordered(heap *H) {
         }
     }
     return true;
+    */
 }
 
 /* @brief Checks if the heap is valid (data structure invariant).
