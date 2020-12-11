@@ -8,7 +8,7 @@ using namespace std;
 
 int solution(int n, vector<vector<int>> results) {
     // Initialize matrix
-    bool adj[n+1][n+1];
+    bool adj[n + 1][n + 1];
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= n; j++) {
             adj[i][j] = false;
@@ -38,7 +38,7 @@ int solution(int n, vector<vector<int>> results) {
                 count++;
             }
         }
-        ans += (count == n-1);
+        ans += (count == n - 1);
     }
     return ans;
 }

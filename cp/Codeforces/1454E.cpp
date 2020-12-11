@@ -2,11 +2,12 @@
 using namespace std;
 
 int main() {
-    int T; cin >> T;
-
+    int T;
+    cin >> T;
 
     while (T--) {
-        int n; cin >> n;
+        int n;
+        cin >> n;
 
         // Create adj list
         set<int> adj[n];

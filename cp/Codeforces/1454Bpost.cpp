@@ -2,17 +2,22 @@
 using namespace std;
 
 int main() {
-    int T; cin >> T;
-    
+    int T;
+    cin >> T;
+
     while (T--) {
-        int n; cin >> n;
-        
-        vector<int> idx(n+1, 0);
-        vector<int> count(n+1, 0);
+        int n;
+        cin >> n;
+
+        vector<int> idx(n + 1, 0);
+        vector<int> count(n + 1, 0);
 
         for (int i = 0; i < n; i++) {
-            int ai; cin >> ai;
-            idx[ai] = i + 1;  // Don't care if we overwrite idx at previous same ai value
+            int ai;
+            cin >> ai;
+            idx[ai] =
+                i +
+                1; // Don't care if we overwrite idx at previous same ai value
             ++count[ai];
         }
 

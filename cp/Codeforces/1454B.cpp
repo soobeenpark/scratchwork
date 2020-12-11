@@ -27,7 +27,8 @@ int main() {
         if (uniqueNum == -1) {
             cout << uniqueNum;
         } else {
-            cout << distance(v.begin(), find(v.begin(), v.end(), uniqueNum)) + 1;
+            cout << distance(v.begin(), find(v.begin(), v.end(), uniqueNum)) +
+                        1;
         }
         cout << endl;
     }
