@@ -6,9 +6,11 @@ Problem Statement:
 
 Suppose there are two stacks of fish boxes, each with labelled weights on them.
 For example,
-
+```
  fish stack1:   top [40kg, 10kg, 50kg] bottom
+
  fish stack2:   top [20kg, 20kg, 60kg] bottom
+ ```
 
  We want to sell all the fish to make a profit. Say the amount of money sold is proportional to the weight (ie. 1kg = $10). Our goal is to sell the fish in a way to maximize the profit.
 
