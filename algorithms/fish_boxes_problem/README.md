@@ -16,7 +16,7 @@ For example,
 
  On each day, only one of the boxes at the top of either stack can be sold. So in the example, we must choose between selling 40kg from stack1 or 20kg from stack2 on the first day.
 
- Every day, the value of the remaining fish not sold decreases by 0.9 times its original value because it becomes less fresh. So for example, if we sold 40kg from stack1 on day 1, and 20kg from stack2 on day 2, then the overall profit would be $10 * (40 + 0.9\*20) = $580. Continuing the example, if we sell 10kg from stack1 on day 3, then the profit until day 3 would be $580 + $0.9\*0.9\*10 = $588 (we round down to the nearest integer).
+ Every day, the value of the remaining fish not sold decreases by 0.9 times its original value because it becomes less fresh. So for example, if we sold 40kg from stack1 on day 1, and 20kg from stack2 on day 2, then the overall profit until day 2 would be $10 * (40 + 0.9\*20) = $580. Continuing the example, if we sell 10kg from stack1 on day 3, then the profit until day 3 would be $580 + $0.9\*0.9\*10 = $588.1
 
 Devise an algorithm to sell all the fish from both stacks while maximizing profit, keeping in mind that value decrease as freshness decreases. In the example, the max profit should be $1540.25
 
