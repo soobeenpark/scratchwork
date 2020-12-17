@@ -10,8 +10,8 @@ void test_case(vector<int> tn) {
 
     int sz = tn.size();
     for (int i = 0; i < sz; i++) {
-        for (int j = 0; j < sz; j++) {
-            for (int k = 0; k < sz; k++) {
+        for (int j = i; j < sz; j++) {
+            for (int k = j; k < sz; k++) {
                 if (tn[i] + tn[j] + tn[k] == target) {
                     cout << true << endl;
                     return;
@@ -33,7 +33,7 @@ int main() {
         triangular_nums[i++] = tn;
         tn += (i + 1);
     }
-    triangular_nums.resize(i);
+    triangular_nums.resize(i-1);
 
     while (T--) {
         test_case(triangular_nums);
